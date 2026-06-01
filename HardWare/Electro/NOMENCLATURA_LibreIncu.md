@@ -1,6 +1,6 @@
 # Nomenclatura y BOM — Esquema eléctrico LibreIncu
 
-Referencias de componentes y mapa de señales del esquema `EsquemaLibreIncu.fc.qet`.
+Referencias de componentes y mapa de señales del esquema `EsquemaLibreIncu.qet`.
 **Fuente de verdad para señales/GPIO: el firmware** (`src/embedded/libs/credentials.lua`).
 
 ## Mapa de señales (firmware = verdad)
