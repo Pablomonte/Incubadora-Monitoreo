@@ -1,76 +1,101 @@
-# Inventario Operativo
+# Inventario mecanico extraido del CAD maestro
 
-| Pieza | Ruta CAD | Cantidad | Dimensiones envolventes mm | Material/nota | Uso | Nivel de fabricacion | Confianza | Accion |
-|---|---|---|---|---|---|---|---|---|
-| S�lido importado1 | BombaStuff | 6 | 168.0x240.4x207.6 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | BASE | 43 | 588.0x330.0x1170.4 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| PLANAR_3 | BASE | 1 | 6.6x67.2x28.7 | Desconocido | otro | imprimir | envolvente | Imprimir |
-| CYL_28 | BASE | 1 | 12.0x18.1x38.4 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| PLANAR_15 | BASE | 1 | 27.6x95.0x6.6 | Desconocido | otro | imprimir | envolvente | Imprimir |
-| CYL_29 | BASE | 1 | 19.2x44.4x38.4 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | Chapa-Caja | 1 | 458.6x333.1x85.2 | Desconocido | cerramiento | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | BoquillaAltaP | 5 | 43.9x50.4x20.4 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | Chapa-Paredon | 2 | 379.2x359.0x290.8 | Desconocido | cerramiento | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado2 | Chapa-SoporteInferior | 1 | 24.0x504.0x24.0 | Desconocido | cerramiento | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado3 | Chapa-SoporteInferior | 1 | 24.0x504.0x24.0 | Desconocido | cerramiento | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | Chapa-SoporteInferior | 2 | 486.0x192.0x24.0 | Desconocido | cerramiento | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | Reguetones | 14 | 48.0x48.0x39.5 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado2 | BombaStuff | 2 | 67.2x107.3x107.3 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado3 | BombaStuff | 2 | 37.2x107.3x107.3 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Bandeja::huevera | 23 | 0.1x0.1x0.2 | Desconocido | bandeja | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Rodamiento626 | 11 | 6.0x19.0x19.0 | comercial | otro | comercial (comprar) | envolvente | Comprar |
-| S�lido importado1 | AcopleBandejaEje | 75 | 55.2x18.8x18.8 | Desconocido | bandeja | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | TuercasM6 | 82 | 11.1x14.0x14.0 | Desconocido | fijacion | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Tuercas M3 | 11 | 9.0x9.0x9.0 | fijación comercial | fijacion | comercial (comprar) | envolvente | Comprar |
-| Unnamed | Tornillo M3 | 27 | 16.0x24.8x11.6 | fijación comercial | fijacion | comercial (comprar) | envolvente | Comprar |
-| S�lido importado5 | BASE | 1 | 48.0x18.0x60.0 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado8 | BASE | 2 | 45.3x53.8x40.6 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado10 | BASE | 1 | 24.9x24.0x24.0 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado13 | BASE | 1 | 95.8x48.0x21.6 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado2 | BASE | 1 | 132.0x48.0x96.0 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado7 | BASE | 1 | 108.0x48.0x40.7 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado3 | BASE | 1 | 24.0x18.0x48.0 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado11 | BASE | 1 | 95.8x48.0x21.6 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado9 | BASE | 1 | 372.0x108.0x252.0 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado6 | BASE | 1 | 48.0x18.0x48.0 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado4 | BASE | 1 | 120.0x18.0x108.0 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado12 | BASE | 1 | 95.8x48.0x21.6 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Tuercas M4 | 5 | 3.2x11.5x11.5 | fijación comercial | fijacion | comercial (comprar) | envolvente | Comprar |
-| Unnamed | Auxiliar1 | 29 | 22.6x487.9x147.9 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | BandejasFijas | 12 | 98.4x480.6x18.0 | Desconocido | bandeja | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | ACOPLE 8 a 5 | 17 | 30.5x15.3x310.0 | Desconocido | volteo | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Barra Avance Z | 2 | 30.5x8.2x8.2 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Tuercas M8 | 2 | 7.4x15.6x15.6 | Desconocido | fijacion | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | HerrajesTraseros | 3 | 113.5x37.5x136.0 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Letritas | 10 | 0.2x21.5x20.2 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | ChapaCooler | 3 | 461.3x232.0x169.7 | Desconocido | cerramiento | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Buje-PTFE | 2 | 3.7x5.3x311.0 | PTFE | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Pelos | 780 | 18.8x0.2x0.2 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Tapas | 4 | 386.6x10.8x277.1 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| CYL_10 | Auxiliar1 | 1 | 28.8x19.0x38.4 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | Auxiliar1 | 2 | 13.3x15.9x13.3 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | VentilacionDoor | 2 | 30.9x22.1x22.1 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | MDF18mm | 4 | 601.4x784.2x1169.0 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | HombroBandej | 6 | 13.8x32.8x89.2 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Tornillo M4 | 18 | 29.7x7.4x7.4 | fijación comercial | fijacion | comercial (comprar) | envolvente | Comprar |
-| Unnamed | Rodamiento624 | 3 | 5.0x13.0x13.0 | comercial | otro | comercial (comprar) | envolvente | Comprar |
-| Unnamed | AcoplesPA6 | 3 | 6.3x26.8x30.7 | PA6 | volteo | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Chapa 1/8 | 8 | 121.6x92.3x260.9 | chapa 1/8" | cerramiento | cortar | envolvente | Cortar |
-| S�lido importado1 | BandejasFijas | 3 | 480.0x18.0x18.0 | Desconocido | bandeja | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | FondoBrazo | 2 | 6.0x40.3x329.4 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | U 2219 - Door | 4 | 26.4x541.9x1014.6 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | FRENTE-PC | 2 | 4.8x486.2x1189.2 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | BisagraP | 4 | 34.9x34.9x75.6 | Desconocido | puerta | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | Cooler | 1 | 204.0x173.9x153.5 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Perfil25-25 | 20 | 576.9x653.5x1085.5 | tubo 25x25 | estructura | cortar | envolvente | Cortar |
-| Unnamed | MDF55 | 2 | 497.2x6.6x1021.1 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | RodamientoHLM8UU | 1 | 18.9x18.9x53.8 | comercial | otro | comercial (comprar) | envolvente | Comprar |
-| Unnamed | Tuercas M5 | 8 | 12.3x12.3x12.3 | fijación comercial | fijacion | comercial (comprar) | envolvente | Comprar |
-| Unnamed | Tornillo M5 | 24 | 25.9x48.0x10.0 | fijación comercial | fijacion | comercial (comprar) | envolvente | Comprar |
-| S�lido importado1 | PoleaDentada | 1 | 33.1x50.2x50.2 | Desconocido | volteo | ver_CAD | exacta | Ver_cad con CAD abierto |
-| S�lido importado1 | Auxiliar2 | 1 | 121.1x43.2x43.2 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Auxiliar3 | 1 | 73.2x28.6x70.9 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | SoporT-AntiVib | 1 | 72.6x28.6x63.8 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | SeparadorPAI | 1 | 4.0x75.2x89.5 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | Cremayera | 4 | 23.5x64.6x212.8 | Desconocido | otro | ver_CAD | exacta | Ver_cad con CAD abierto |
-| Unnamed | GUIA-CREMA | 3 | 20.7x62.7x316.6 | Desconocido | bandeja | ver_CAD | exacta | Ver_cad con CAD abierto |
+- **Modelo:** `Incubadora-Final.3dm` (Rhino, unidades **mm**)
+- **Envolvente total:** 604.8 x 1263.9 x 1189.2 mm (ancho x prof x alto aprox.)
+- **Tamanos = bounding box (envolvente).** No son cotas de agujeros, plegados ni angulos: para geometria fina **abrir el CAD**.
+- Notacion de tamanos: `seccion_menor x seccion_media x largo (xN)`, una entrada por cada medida distinta dentro de la pieza.
+
+
+## Estructura
+
+| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
+|---|---|---|---|---|---|---|
+| Perfil25-25 | Perfil25-25 | 20 | 30x30x1086 (x4); 25x25x934 (x1); 25x25x654 (x4); 25x25x609 (x1); 30x30x577 (x4); 40x40x461 (x1); 25x25x448 (x1); 25x25x406 (x1); 25x25x191 (x1); 30x122x143 (x2) | Tubo estructural 25x25 (la capa tambien incluye perfiles 30x30) | cortar | envolvente |
+
+## Cerramiento
+
+| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
+|---|---|---|---|---|---|---|
+| Chapa 1/8 | Chapa 1/8 | 8 | 3x22x261 (x1); 3x88x122 (x1); 4x90x108 (x1); 4x39x92 (x1); 4x46x90 (x1); 4x43x83 (x2); 3x58x77 (x1) | Chapa 1/8" (~3.2 mm) | cortar + plegar (VER CAD) | envolvente |
+| Chapa-SoporteInferior | Chapa-SoporteInferior | 4 | 24x24x504 (x2); 24x24x486 (x1); 1x192x468 (x1) | Chapa metalica plegada | cortar + plegar (VER CAD) | envolvente |
+| MDF18mm | MDF18mm | 4 | 22x784x1169 (x2); 22x601x659 (x1); 18x501x654 (x1) | Tablero MDF 18 mm | cortar tablero (VER CAD) | envolvente |
+| ChapaCooler | ChapaCooler | 3 | 170x232x461 (x1); 0x12x16 (x1); 0x4x5 (x1) | Chapa metalica plegada | cortar + plegar (VER CAD) | envolvente |
+| Chapa-Paredon | Chapa-Paredon | 2 | 53x163x379 (x1); 264x291x359 (x1) | Chapa metalica plegada | cortar + plegar (VER CAD) | envolvente |
+| FRENTE-PC | FRENTE-PC | 2 | 5x486x1189 (x2) |  | cortar tablero (VER CAD) | envolvente |
+| MDF55 | MDF55 | 2 | 6x497x1021 (x1); 7x472x982 (x1) | Tablero MDF | cortar tablero (VER CAD) | envolvente |
+| Chapa-Caja | Chapa-Caja | 1 | 85x333x459 (x1) | Chapa metalica plegada | cortar + plegar (VER CAD) | envolvente |
+
+## Puerta
+
+| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
+|---|---|---|---|---|---|---|
+| Tapas | Tapas | 4 | 11x277x387 (x1); 6x241x332 (x1); 11x168x173 (x1); 6x150x154 (x1) |  | VER CAD | envolvente |
+| U 2219 - Door | U 2219 - Door | 4 | 23x26x1015 (x2); 23x26x542 (x2) |  | VER CAD | envolvente |
+| BisagraP | BisagraP | 4 | 8x35x76 (x4) |  | VER CAD | envolvente |
+| Cremayera | Cremayera | 4 | 24x64x213 (x1); 24x65x165 (x1); 4x4x11 (x2) |  | VER CAD | envolvente |
+| VentilacionDoor | VentilacionDoor | 2 | 22x22x31 (x2) |  | VER CAD | envolvente |
+
+## Bandeja
+
+| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
+|---|---|---|---|---|---|---|
+| AcopleBandejaEje | AcopleBandejaEje | 75 | 19x19x55 (x6); 8x8x48 (x12); 19x19x39 (x3); 12x19x19 (x12); 2x14x14 (x30); 0x9x9 (x12) | Nylon PA6 (mecanizado) | mecanizar / imprimir (VER CAD) | envolvente |
+| huevera | Bandeja::huevera | 23 | 23 bloque(s) sin explotar |  | VER CAD | instancia (VER CAD) |
+| BandejasFijas | BandejasFijas | 15 | 18x18x481 (x6); 18x18x480 (x3); 16x98x98 (x6) |  | VER CAD | envolvente |
+| HombroBandej | HombroBandej | 6 | 14x33x89 (x6) |  | VER CAD | envolvente |
+| GUIA-CREMA | GUIA-CREMA | 3 | 11x11x317 (x1); 14x21x63 (x2) |  | VER CAD | envolvente |
+
+## Volteo
+
+| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
+|---|---|---|---|---|---|---|
+| ACOPLE 8 a 5 | ACOPLE 8 a 5 | 17 | 7x18x310 (x1); 8x8x30 (x2); 6x13x15 (x2); 2x6x6 (x10); 2x5x5 (x2) |  | mecanizar / imprimir (VER CAD) | envolvente |
+| Rodamiento626 | Rodamiento626 | 11 | 6x19x19 (x11) | Rodamiento 626 - 6x19x6 mm (comercial) | comprar | estandar |
+| Rodamiento624 | Rodamiento624 | 3 | 5x13x13 (x3) | Rodamiento 624 - 4x13x5 mm (comercial) | comprar | estandar |
+| AcoplesPA6 | AcoplesPA6 | 3 | 6x27x31 (x1); 6x24x31 (x2) | Nylon PA6 (mecanizado) | mecanizar / imprimir (VER CAD) | envolvente |
+| Barra Avance Z | Barra Avance Z | 2 | 8x8x30 (x2) |  | VER CAD | envolvente |
+| Buje-PTFE | Buje-PTFE | 2 | 2x4x311 (x1); 4x5x5 (x1) | PTFE (mecanizado) | mecanizar / imprimir (VER CAD) | envolvente |
+| FondoBrazo | FondoBrazo | 2 | 6x40x329 (x2) |  | VER CAD | envolvente |
+| RodamientoHLM8UU | RodamientoHLM8UU | 1 | 19x19x54 (x1) | Rodamiento lineal LM8UU (comercial) | comprar | estandar |
+| PoleaDentada | PoleaDentada | 1 | 33x50x50 (x1) | Polea dentada | mecanizar / imprimir (VER CAD) | envolvente |
+| SoporT-AntiVib | SoporT-AntiVib | 1 | 29x64x73 (x1) |  | VER CAD | envolvente |
+
+## Fijacion
+
+| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
+|---|---|---|---|---|---|---|
+| TuercasM6 | TuercasM6 | 82 | 11x14x14 (x39); 8x10x10 (x5); 1x7x7 (x33); 1x5x5 (x5) | Fijacion comercial | comprar | estandar |
+| Tornillo M3 | Tornillo M3 | 27 | 3x3x25 (x4); 3x3x23 (x4); 3x3x16 (x3); 3x3x15 (x3); 3x3x12 (x3); 3x3x10 (x3); 1x5x5 (x7) | Fijacion comercial | comprar | estandar |
+| Tornillo M5 | Tornillo M5 | 24 | 6x6x48 (x4); 6x6x44 (x4); 6x6x26 (x4); 6x6x24 (x4); 3x10x10 (x8) | Fijacion comercial | comprar | estandar |
+| Tornillo M4 | Tornillo M4 | 18 | 4x4x30 (x4); 4x4x24 (x6); 4x4x20 (x2); 2x7x7 (x6) | Fijacion comercial | comprar | estandar |
+| Tuercas M3 | Tuercas M3 | 11 | 3x9x9 (x11) | Fijacion comercial | comprar | estandar |
+| Tuercas M5 | Tuercas M5 | 8 | 4x12x12 (x8) | Fijacion comercial | comprar | estandar |
+| Tuercas M4 | Tuercas M4 | 5 | 3x12x12 (x5) | Fijacion comercial | comprar | estandar |
+| Tuercas M8 | Tuercas M8 | 2 | 7x16x16 (x2) | Fijacion comercial | comprar | estandar |
+
+## Comercial
+
+| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
+|---|---|---|---|---|---|---|
+| BombaStuff | BombaStuff | 10 | 108x109x240 (x1); 162x168x208 (x1); 65x104x124 (x1); 67x85x121 (x1); 14x111x111 (x1); 2x107x107 (x2); 58x66x67 (x1); 38x39x57 (x1); 26x37x37 (x1) | Bomba (comercial) | comprar | envolvente |
+| Cooler | Cooler | 1 | 154x174x204 (x1) | Ventilador / cooler (comercial) | comprar | envolvente |
+
+## Otro
+
+| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
+|---|---|---|---|---|---|---|
+| BASE | BASE | 60 | 8x22x1170 (x2); 8x22x588 (x2); 0x330x456 (x1); 108x252x372 (x1); 3x90x264 (x1); 30x46x139 (x2); 48x96x132 (x1); 98x112x126 (x1); 18x108x120 (x1); 41x48x108 (x1); 22x48x96 (x3); 7x28x95 (x1); 7x29x67 (x1); 18x48x60 (x1); 41x45x54 (x1); 18x24x48 (x1); 18x48x48 (x1); 19x38x44 (x1); 12x18x38 (x1); 19x19x28 (x3); 24x24x25 (x1); 13x13x16 (x5); 10x10x16 (x15); 14x14x16 (x2); 2x14x14 (x9); 1 bloque(s) sin explotar |  | VER CAD | envolvente |
+| BoquillaAltaP | BoquillaAltaP | 5 | 18x20x50 (x1); 17x17x44 (x1); 11x11x28 (x1); 10x10x16 (x2) |  | VER CAD | envolvente |
+| HerrajesTraseros | HerrajesTraseros | 3 | 6x38x136 (x2); 6x38x113 (x1) |  | VER CAD | envolvente |
+| SeparadorPAI | SeparadorPAI | 1 | 4x75x90 (x1) |  | VER CAD | envolvente |
+
+## Visual
+
+| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
+|---|---|---|---|---|---|---|
+| Pelos | Pelos | 780 | 780 bloque(s) sin explotar |  | no fabricable (referencia visual) | instancia (VER CAD) |
+| Auxiliar1 | Auxiliar1 | 32 | 4x53x488 (x2); 22x24x148 (x2); 22x78x90 (x2); 22x53x65 (x2); 23x24x60 (x2); 19x29x38 (x1); 13x13x16 (x2); 1x12x12 (x8); 1x10x10 (x4); 1x9x9 (x7) |  | no fabricable (referencia visual) | envolvente |
+| Reguetones | Reguetones | 14 | 23x48x48 (x6); 11x11x40 (x4); 2x22x22 (x4) |  | no fabricable (referencia visual) | envolvente |
+| Letritas | Letritas | 10 | 0x20x22 (x1); 0x3x20 (x1); 0x15x20 (x4); 0x13x20 (x1); 0x11x20 (x1); 0x10x20 (x1); 0x17x20 (x1) |  | no fabricable (referencia visual) | envolvente |
+| Auxiliar2 | Auxiliar2 | 1 | 43x43x121 (x1) |  | no fabricable (referencia visual) | envolvente |
+| Auxiliar3 | Auxiliar3 | 1 | 29x71x73 (x1) |  | no fabricable (referencia visual) | envolvente |
