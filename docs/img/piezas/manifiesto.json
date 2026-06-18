@@ -20,12 +20,67 @@
   },
   "render_method": "rhino3dm_native_meshes",
   "nota": "El mallado OCC completo del STEP falla con 'overlapping facets'; las imagenes se generaron a partir de las mallas nativas de rhino3dm (Extrusion.GetMesh / BrepFace.GetMesh), preservando la identidad por capa.",
+  "conjunto_omitidos": [
+    {
+      "capa": "huevera",
+      "motivo": "instancia de bloque (sin malla)"
+    },
+    {
+      "capa": "AcopleBandejaEje",
+      "motivo": "acople repetido (no estructural)"
+    },
+    {
+      "capa": "ACOPLE 8 a 5",
+      "motivo": "acople repetido (no estructural)"
+    },
+    {
+      "capa": "AcoplesPA6",
+      "motivo": "acople repetido (no estructural)"
+    },
+    {
+      "capa": "Barra Avance Z",
+      "motivo": "pieza secundaria/pequena"
+    },
+    {
+      "capa": "Buje-PTFE",
+      "motivo": "pieza secundaria/pequena"
+    },
+    {
+      "capa": "FondoBrazo",
+      "motivo": "pieza secundaria/pequena"
+    },
+    {
+      "capa": "SoporT-AntiVib",
+      "motivo": "pieza secundaria/pequena"
+    },
+    {
+      "capa": "BASE",
+      "motivo": "grupo BASE (objetos sueltos, no estructural)"
+    },
+    {
+      "capa": "BoquillaAltaP",
+      "motivo": "pieza secundaria/pequena"
+    },
+    {
+      "capa": "HerrajesTraseros",
+      "motivo": "pieza secundaria/pequena"
+    },
+    {
+      "capa": "SeparadorPAI",
+      "motivo": "pieza secundaria/pequena"
+    }
+  ],
   "piezas": [
     {
       "slug": "perfil25-25",
       "pieza": "Perfil25-25",
       "estado": "rendered",
       "triangulos": 13259,
+      "dims_mm": [
+        576.9,
+        668.3,
+        1085.5
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -33,6 +88,11 @@
       "pieza": "Chapa 1/8",
       "estado": "rendered",
       "triangulos": 18380,
+      "dims_mm": [
+        125.2,
+        255.1,
+        297.6
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -40,6 +100,11 @@
       "pieza": "Chapa-SoporteInferior",
       "estado": "rendered",
       "triangulos": 1566,
+      "dims_mm": [
+        24.0,
+        486.0,
+        504.0
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -47,6 +112,11 @@
       "pieza": "MDF18mm",
       "estado": "rendered",
       "triangulos": 7176,
+      "dims_mm": [
+        601.4,
+        784.2,
+        1169.0
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -54,6 +124,11 @@
       "pieza": "ChapaCooler",
       "estado": "rendered",
       "triangulos": 5247,
+      "dims_mm": [
+        169.7,
+        232.0,
+        461.3
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -61,6 +136,11 @@
       "pieza": "Chapa-Paredon",
       "estado": "rendered",
       "triangulos": 8080,
+      "dims_mm": [
+        290.8,
+        359.0,
+        407.4
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -68,6 +148,11 @@
       "pieza": "FRENTE-PC",
       "estado": "rendered",
       "triangulos": 4744,
+      "dims_mm": [
+        19.7,
+        486.3,
+        1189.2
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -75,6 +160,11 @@
       "pieza": "MDF55",
       "estado": "rendered",
       "triangulos": 1436,
+      "dims_mm": [
+        169.1,
+        497.2,
+        1021.1
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -82,6 +172,11 @@
       "pieza": "Chapa-Caja",
       "estado": "rendered",
       "triangulos": 3980,
+      "dims_mm": [
+        85.2,
+        333.1,
+        458.6
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -89,6 +184,11 @@
       "pieza": "Tapas",
       "estado": "rendered",
       "triangulos": 2164,
+      "dims_mm": [
+        15.4,
+        465.2,
+        783.3
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -96,6 +196,11 @@
       "pieza": "U 2219 - Door",
       "estado": "rendered",
       "triangulos": 8172,
+      "dims_mm": [
+        26.4,
+        541.9,
+        1014.6
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -103,6 +208,11 @@
       "pieza": "BisagraP",
       "estado": "rendered",
       "triangulos": 2496,
+      "dims_mm": [
+        34.9,
+        34.9,
+        669.1
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -110,6 +220,11 @@
       "pieza": "VentilacionDoor",
       "estado": "rendered",
       "triangulos": 19720,
+      "dims_mm": [
+        22.2,
+        30.9,
+        422.2
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -117,6 +232,11 @@
       "pieza": "huevera",
       "estado": "rendered",
       "triangulos": 1217,
+      "dims_mm": [
+        23.6,
+        360.9,
+        391.9
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -124,6 +244,11 @@
       "pieza": "BandejasFijas",
       "estado": "rendered",
       "triangulos": 15998,
+      "dims_mm": [
+        260.0,
+        480.0,
+        480.7
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -131,6 +256,11 @@
       "pieza": "HombroBandej",
       "estado": "rendered",
       "triangulos": 58332,
+      "dims_mm": [
+        32.8,
+        329.2,
+        453.8
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -138,6 +268,11 @@
       "pieza": "AcopleBandejaEje",
       "estado": "rendered",
       "triangulos": 118914,
+      "dims_mm": [
+        18.8,
+        307.8,
+        530.4
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -145,6 +280,11 @@
       "pieza": "ACOPLE 8 a 5",
       "estado": "rendered",
       "triangulos": 295376,
+      "dims_mm": [
+        426.5,
+        467.4,
+        486.0
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -152,6 +292,11 @@
       "pieza": "Cremayera",
       "estado": "rendered",
       "triangulos": 23672,
+      "dims_mm": [
+        24.2,
+        64.6,
+        346.6
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -159,6 +304,11 @@
       "pieza": "AcoplesPA6",
       "estado": "rendered",
       "triangulos": 6794,
+      "dims_mm": [
+        6.3,
+        26.8,
+        263.8
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -166,6 +316,11 @@
       "pieza": "GUIA-CREMA",
       "estado": "rendered",
       "triangulos": 4194,
+      "dims_mm": [
+        20.7,
+        62.7,
+        319.5
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -173,6 +328,11 @@
       "pieza": "Barra Avance Z",
       "estado": "rendered",
       "triangulos": 552494,
+      "dims_mm": [
+        8.2,
+        30.5,
+        132.2
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -180,6 +340,11 @@
       "pieza": "Buje-PTFE",
       "estado": "rendered",
       "triangulos": 1036,
+      "dims_mm": [
+        11.6,
+        15.8,
+        311.0
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -187,6 +352,11 @@
       "pieza": "FondoBrazo",
       "estado": "rendered",
       "triangulos": 9760,
+      "dims_mm": [
+        40.3,
+        329.4,
+        464.4
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -194,6 +364,11 @@
       "pieza": "PoleaDentada",
       "estado": "rendered",
       "triangulos": 3928,
+      "dims_mm": [
+        33.1,
+        50.2,
+        50.2
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -201,6 +376,11 @@
       "pieza": "SoporT-AntiVib",
       "estado": "rendered",
       "triangulos": 2968,
+      "dims_mm": [
+        28.6,
+        63.8,
+        72.6
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -208,6 +388,11 @@
       "pieza": "BASE",
       "estado": "rendered",
       "triangulos": 197582,
+      "dims_mm": [
+        588.0,
+        694.6,
+        1170.4
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -215,6 +400,11 @@
       "pieza": "BoquillaAltaP",
       "estado": "rendered",
       "triangulos": 13292,
+      "dims_mm": [
+        28.7,
+        50.4,
+        58.6
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -222,6 +412,11 @@
       "pieza": "HerrajesTraseros",
       "estado": "rendered",
       "triangulos": 7668,
+      "dims_mm": [
+        37.5,
+        380.9,
+        589.4
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     },
     {
@@ -229,6 +424,11 @@
       "pieza": "SeparadorPAI",
       "estado": "rendered",
       "triangulos": 3376,
+      "dims_mm": [
+        4.0,
+        75.3,
+        89.5
+      ],
       "motivo": "renderizado desde mallas nativas de rhino3dm"
     }
   ]

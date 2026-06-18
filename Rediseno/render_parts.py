@@ -314,11 +314,12 @@ def get_mesh_from_geometry(geom):
 # --------------------------------------------------------------------------- #
 # Render con matplotlib
 # --------------------------------------------------------------------------- #
-def render_mesh(verts, faces, output_path, title=None, elev=30, azim=225, dpi=150):
-    """Render isometrico sombreado de una malla."""
+def render_mesh(verts, faces, output_path, title=None, dims_mm=None,
+                elev=22, azim=-60, dpi=200):
+    """Render isometrico sombreado de una malla: aspecto real, caras opacas."""
     if len(faces) == 0:
         raise ValueError("No hay caras para renderizar")
-    fig = plt.figure(figsize=(6, 6))
+    fig = plt.figure(figsize=(7, 7))
     ax = fig.add_subplot(111, projection="3d")
 
     polys = verts[faces]
@@ -327,30 +328,43 @@ def render_mesh(verts, faces, output_path, title=None, elev=30, azim=225, dpi=15
     norms[norms == 0] = 1.0
     normals = normals / norms
     ls = LightSource(azdeg=315, altdeg=45)
-    intensity = ls.shade_normals(normals)
-    base_color = to_rgba_array("tab:blue")
-    facecolors = intensity[:, None] * base_color
+    intensity = ls.shade_normals(normals)                 # (N,) en [0, 1]
 
-    coll = Poly3DCollection(
-        polys,
-        facecolors=facecolors,
-        edgecolors="none",
-        alpha=1.0,
-    )
+    # Sombreado opaco con termino ambiente (solo RGB; alfa fijo = 1).
+    AMB = 0.35
+    base_rgb = to_rgba_array("tab:blue")[0, :3]            # RGB (3,)
+    shaded = base_rgb[None, :] * (AMB + (1.0 - AMB) * intensity[:, None])
+    facecolors = np.ones((len(faces), 4))
+    facecolors[:, :3] = np.clip(shaded, 0.0, 1.0)
+
+    # Aristas sutiles solo en mallas chicas (definicion sin emborronar).
+    if len(faces) <= 6000:
+        edgecolors = (0.0, 0.0, 0.0, 0.25)
+        linewidths = 0.1
+    else:
+        edgecolors = "none"
+        linewidths = 0.0
+
+    coll = Poly3DCollection(polys, facecolors=facecolors,
+                            edgecolors=edgecolors, linewidths=linewidths)
     ax.add_collection3d(coll)
 
-    center = verts.mean(axis=0)
-    max_span = max(verts.max(axis=0) - verts.min(axis=0))
-    margin = max_span * 0.15 if max_span > 0 else 1.0
+    spans = verts.max(axis=0) - verts.min(axis=0)
+    max_span = float(spans.max()) or 1.0
+    margin = max_span * 0.04
     ax.set_xlim(verts[:, 0].min() - margin, verts[:, 0].max() + margin)
     ax.set_ylim(verts[:, 1].min() - margin, verts[:, 1].max() + margin)
     ax.set_zlim(verts[:, 2].min() - margin, verts[:, 2].max() + margin)
-    ax.set_box_aspect([1, 1, 1])
+    # Aspecto real con piso minimo para que piezas planas no queden invisibles.
+    ax.set_box_aspect(np.maximum(spans, max_span * 0.03))
     ax.view_init(elev=elev, azim=azim)
     ax.set_axis_off()
     if title:
         ax.set_title(title, fontsize=9, pad=0)
-    plt.tight_layout()
+    if dims_mm:
+        fig.text(0.5, 0.02,
+                 f"{dims_mm[0]:.0f} x {dims_mm[1]:.0f} x {dims_mm[2]:.0f} mm",
+                 ha="center", fontsize=7, color="0.5")
     fig.savefig(output_path, dpi=dpi, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
@@ -415,6 +429,11 @@ def main():
             print(f"  [SKIP] {slug}: sin objetos")
             continue
 
+        # Envolvente real de la pieza (bbox max - min), no los spans con piso minimo.
+        pmins = [min(o["bbox"][i] for o in objs) for i in range(3)]
+        pmaxs = [max(o["bbox"][3 + i] for o in objs) for i in range(3)]
+        dims_mm = sorted(round(float(pmaxs[i] - pmins[i]), 1) for i in range(3))
+
         all_v = []
         all_f = []
         offset = 0
@@ -431,6 +450,7 @@ def main():
                 "pieza": leaf,
                 "estado": "skipped",
                 "triangulos": 0,
+                "dims_mm": dims_mm,
                 "motivo": "geometria no mallable (VER CAD)",
             })
             complete = False
@@ -441,12 +461,13 @@ def main():
         faces = np.vstack(all_f)
         out_path = os.path.join(OUT_DIR, f"{slug}.png")
         try:
-            render_mesh(verts, faces, out_path, title=leaf)
+            render_mesh(verts, faces, out_path, title=leaf, dims_mm=dims_mm)
             manifest.append({
                 "slug": slug,
                 "pieza": leaf,
                 "estado": "rendered",
                 "triangulos": int(len(faces)),
+                "dims_mm": dims_mm,
                 "motivo": "renderizado desde mallas nativas de rhino3dm",
             })
             print(f"  [OK] {slug}: {len(faces)} triangulos")
@@ -456,42 +477,81 @@ def main():
                 "pieza": leaf,
                 "estado": "error",
                 "triangulos": 0,
+                "dims_mm": dims_mm,
                 "motivo": f"error matplotlib: {exc}",
             })
             complete = False
             print(f"  [ERROR] {slug}: {exc}")
 
-    # Render del conjunto
+    # Render del conjunto: allowlist explicita de piezas definitorias (sin muestreo aleatorio).
     print("\nRenderizando conjunto (_conjunto.png)...")
-    all_v = []
-    all_f = []
-    offset = 0
-    target_slugs = {slugify(r["pieza"]) for r in inventory}
-    for leaf, objs in by_leaf.items():
-        if slugify(leaf) not in target_slugs:
+    CONJUNTO_ALLOW = {
+        "Perfil25-25",
+        "Chapa-Caja", "Chapa-Paredon", "Chapa-SoporteInferior", "ChapaCooler", "Chapa 1/8",
+        "MDF18mm", "MDF55", "FRENTE-PC",
+        "U 2219 - Door", "VentilacionDoor", "Tapas", "BisagraP",
+        "BandejasFijas", "HombroBandej", "GUIA-CREMA", "Cremayera", "PoleaDentada",
+    }
+
+    def _motivo_omision(leaf):
+        n = leaf.lower()
+        if "acople" in n:
+            return "acople repetido (no estructural)"
+        if leaf == "BASE":
+            return "grupo BASE (objetos sueltos, no estructural)"
+        if "huevera" in n:
+            return "instancia de bloque (sin malla)"
+        if any(k in n for k in ("buje", "barra", "fondo", "antivib", "herraje",
+                                 "separador", "boquilla", "rodamiento")):
+            return "pieza secundaria/pequena"
+        return "secundaria (no definitoria del conjunto)"
+
+    # Registrar TODAS las piezas objetivo que NO entran en el conjunto.
+    conjunto_omitidos = [
+        {"capa": r["pieza"], "motivo": _motivo_omision(r["pieza"])}
+        for r in inventory if r["pieza"] not in CONJUNTO_ALLOW
+    ]
+
+    # Acumular por capa para poder recortar por capa entera si hiciera falta.
+    capa_mesh = {}
+    for leaf in CONJUNTO_ALLOW:
+        objs = by_leaf.get(leaf, [])
+        if not objs:
             continue
+        vs, fs, off = [], [], 0
         for o in objs:
             v, f = get_mesh_from_geometry(o["geom"])
             if v is not None:
-                all_v.append(v)
-                all_f.append(f + offset)
-                offset += len(v)
+                vs.append(v)
+                fs.append(f + off)
+                off += len(v)
+        if vs:
+            capa_mesh[leaf] = (np.vstack(vs), np.vstack(fs))
 
-    if all_v:
+    MAX_CONJUNTO_TRIANGLES = 400000
+    total_tri = sum(len(f) for _, f in capa_mesh.values())
+    if total_tri > MAX_CONJUNTO_TRIANGLES:
+        for leaf in sorted(capa_mesh, key=lambda k: len(capa_mesh[k][1]), reverse=True):
+            if total_tri <= MAX_CONJUNTO_TRIANGLES:
+                break
+            total_tri -= len(capa_mesh[leaf][1])
+            conjunto_omitidos.append({"capa": leaf, "motivo": "descartada por tope de triangulos"})
+            del capa_mesh[leaf]
+
+    if capa_mesh:
+        all_v, all_f, offset = [], [], 0
+        for v, f in capa_mesh.values():
+            all_v.append(v)
+            all_f.append(f + offset)
+            offset += len(v)
         verts = np.vstack(all_v)
         faces = np.vstack(all_f)
-        # El conjunto completo puede tener >1M de triangulos; matplotlib no lo
-        # renderiza en tiempo razonable. Muestreamos para la vista general.
-        MAX_CONJUNTO_TRIANGLES = 120000
-        if len(faces) > MAX_CONJUNTO_TRIANGLES:
-            rng = np.random.default_rng(seed=42)
-            idx = rng.choice(len(faces), size=MAX_CONJUNTO_TRIANGLES, replace=False)
-            faces = faces[idx]
+        cdims = sorted(round(float(verts.max(0)[i] - verts.min(0)[i]), 1) for i in range(3))
         try:
             render_mesh(verts, faces, os.path.join(OUT_DIR, "_conjunto.png"),
-                        title="LibreIncu-150 — conjunto de piezas fabricadas",
-                        elev=25, azim=230, dpi=150)
-            print(f"  [OK] conjunto: {len(faces)} triangulos (muestreados)")
+                        title="LibreIncu-150 — conjunto (piezas definitorias)",
+                        dims_mm=cdims)
+            print(f"  [OK] conjunto: {len(faces)} triangulos, {len(capa_mesh)} capas")
         except Exception as exc:
             print(f"  [ERROR] conjunto: {exc}")
             complete = False
@@ -510,6 +570,7 @@ def main():
             "las imagenes se generaron a partir de las mallas nativas de rhino3dm "
             "(Extrusion.GetMesh / BrepFace.GetMesh), preservando la identidad por capa."
         ),
+        "conjunto_omitidos": conjunto_omitidos,
         "piezas": manifest,
     }
 
@@ -522,10 +583,16 @@ def main():
         f.write(f"- **metodo:** {manifest_data['render_method']}\n")
         f.write(f"- **gmsh:** {diag['note']}\n")
         f.write(f"- **match centroides:** {match_info}\n\n")
-        f.write("| Pieza | Slug | Estado | Triangulos | Motivo |\n")
-        f.write("|---|---|---|---|---|\n")
+        f.write("| Pieza | Slug | Estado | Triangulos | Dim mm | Motivo |\n")
+        f.write("|---|---|---|---|---|---|\n")
         for m in manifest:
-            f.write(f"| {m['pieza']} | {m['slug']} | {m['estado']} | {m['triangulos']} | {m['motivo']} |\n")
+            d = m.get("dims_mm")
+            dim_s = "x".join(f"{v:.0f}" for v in d) if d else ""
+            f.write(f"| {m['pieza']} | {m['slug']} | {m['estado']} | {m['triangulos']} | {dim_s} | {m['motivo']} |\n")
+        f.write("\n## Omitidos del conjunto\n\n")
+        f.write("| Capa | Motivo |\n|---|---|\n")
+        for o in conjunto_omitidos:
+            f.write(f"| {o['capa']} | {o['motivo']} |\n")
 
     print(f"\nManifiesto guardado. aceptacion_completa={complete}")
     return 0 if complete else 1
