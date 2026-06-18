@@ -65,13 +65,14 @@ def categoria(leaf):
         return "estructura"
     if "chapa" in n or "mdf" in n or "frente" in n:
         return "cerramiento"
-    if "door" in n or "puerta" in n or "bisagra" in n or "tapa" in n or "cremay" in n:
+    if "door" in n or "puerta" in n or "bisagra" in n or "tapa" in n:
         return "puerta"
-    if "bandeja" in n or "huevera" in n or "guia" in n or "crema" in n or "hombro" in n:
-        return "bandeja"
     if ("polea" in n or "acople" in n or "buje" in n or "rodamiento" in n
-            or "correa" in n or "brazo" in n or "avance" in n or "antivib" in n):
+            or "correa" in n or "brazo" in n or "avance" in n or "antivib" in n
+            or "cremay" in n or "crema" in n):
         return "volteo"
+    if "bandeja" in n or "huevera" in n or "guia" in n or "hombro" in n:
+        return "bandeja"
     if "tornillo" in n or "tuerca" in n or "arandela" in n:
         return "fijacion"
     if "cooler" in n or "bomba" in n or "motor" in n or "ventil" in n:
@@ -278,11 +279,10 @@ def main():
                         r["material"], r["categoria"], r["fabricacion"], r["confianza"]])
 
     with open("cad/inventario.md", "w", encoding="utf-8") as f:
-        f.write("# Inventario mecanico extraido del CAD maestro\n\n")
-        f.write(f"- **Modelo:** `{MODEL}` (Rhino, unidades **mm**)\n")
+        f.write("# LibreIncu-150 — Inventario mecanico\n\n")
         f.write(f"- **Envolvente total:** {overall[0]} x {overall[1]} x {overall[2]} mm "
                 "(ancho x prof x alto aprox.)\n")
-        f.write("- **Tamanos = bounding box (envolvente).** No son cotas de "
+        f.write("- **Tamanos = envolvente.** No son cotas de "
                 "agujeros, plegados ni angulos: para geometria fina **abrir el CAD**.\n")
         f.write("- Notacion de tamanos: `seccion_menor x seccion_media x largo (xN)`, "
                 "una entrada por cada medida distinta dentro de la pieza.\n\n")

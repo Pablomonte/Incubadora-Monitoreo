@@ -1,8 +1,7 @@
-# Inventario mecanico extraido del CAD maestro
+# LibreIncu-150 — Inventario mecanico
 
-- **Modelo:** `Incubadora-Final.3dm` (Rhino, unidades **mm**)
 - **Envolvente total:** 604.8 x 1263.9 x 1189.2 mm (ancho x prof x alto aprox.)
-- **Tamanos = bounding box (envolvente).** No son cotas de agujeros, plegados ni angulos: para geometria fina **abrir el CAD**.
+- **Tamanos = envolvente.** No son cotas de agujeros, plegados ni angulos: para geometria fina **abrir el CAD**.
 - Notacion de tamanos: `seccion_menor x seccion_media x largo (xN)`, una entrada por cada medida distinta dentro de la pieza.
 
 
@@ -32,27 +31,27 @@
 | Tapas | Tapas | 4 | 11x277x387 (x1); 6x241x332 (x1); 11x168x173 (x1); 6x150x154 (x1) |  | VER CAD | envolvente |
 | U 2219 - Door | U 2219 - Door | 4 | 23x26x1015 (x2); 23x26x542 (x2) |  | VER CAD | envolvente |
 | BisagraP | BisagraP | 4 | 8x35x76 (x4) |  | VER CAD | envolvente |
-| Cremayera | Cremayera | 4 | 24x64x213 (x1); 24x65x165 (x1); 4x4x11 (x2) |  | VER CAD | envolvente |
 | VentilacionDoor | VentilacionDoor | 2 | 22x22x31 (x2) |  | VER CAD | envolvente |
 
 ## Bandeja
 
 | Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
 |---|---|---|---|---|---|---|
-| AcopleBandejaEje | AcopleBandejaEje | 75 | 19x19x55 (x6); 8x8x48 (x12); 19x19x39 (x3); 12x19x19 (x12); 2x14x14 (x30); 0x9x9 (x12) | Nylon PA6 (mecanizado) | mecanizar / imprimir (VER CAD) | envolvente |
 | huevera | Bandeja::huevera | 23 | 23 bloque(s) sin explotar |  | VER CAD | instancia (VER CAD) |
 | BandejasFijas | BandejasFijas | 15 | 18x18x481 (x6); 18x18x480 (x3); 16x98x98 (x6) |  | VER CAD | envolvente |
 | HombroBandej | HombroBandej | 6 | 14x33x89 (x6) |  | VER CAD | envolvente |
-| GUIA-CREMA | GUIA-CREMA | 3 | 11x11x317 (x1); 14x21x63 (x2) |  | VER CAD | envolvente |
 
 ## Volteo
 
 | Pieza | Ruta CAD | Cant | Tamanos envolventes mm | Material / nota | Fabricacion | Confianza |
 |---|---|---|---|---|---|---|
+| AcopleBandejaEje | AcopleBandejaEje | 75 | 19x19x55 (x6); 8x8x48 (x12); 19x19x39 (x3); 12x19x19 (x12); 2x14x14 (x30); 0x9x9 (x12) | Nylon PA6 (mecanizado) | mecanizar / imprimir (VER CAD) | envolvente |
 | ACOPLE 8 a 5 | ACOPLE 8 a 5 | 17 | 7x18x310 (x1); 8x8x30 (x2); 6x13x15 (x2); 2x6x6 (x10); 2x5x5 (x2) |  | mecanizar / imprimir (VER CAD) | envolvente |
 | Rodamiento626 | Rodamiento626 | 11 | 6x19x19 (x11) | Rodamiento 626 - 6x19x6 mm (comercial) | comprar | estandar |
+| Cremayera | Cremayera | 4 | 24x64x213 (x1); 24x65x165 (x1); 4x4x11 (x2) |  | VER CAD | envolvente |
 | Rodamiento624 | Rodamiento624 | 3 | 5x13x13 (x3) | Rodamiento 624 - 4x13x5 mm (comercial) | comprar | estandar |
 | AcoplesPA6 | AcoplesPA6 | 3 | 6x27x31 (x1); 6x24x31 (x2) | Nylon PA6 (mecanizado) | mecanizar / imprimir (VER CAD) | envolvente |
+| GUIA-CREMA | GUIA-CREMA | 3 | 11x11x317 (x1); 14x21x63 (x2) |  | VER CAD | envolvente |
 | Barra Avance Z | Barra Avance Z | 2 | 8x8x30 (x2) |  | VER CAD | envolvente |
 | Buje-PTFE | Buje-PTFE | 2 | 2x4x311 (x1); 4x5x5 (x1) | PTFE (mecanizado) | mecanizar / imprimir (VER CAD) | envolvente |
 | FondoBrazo | FondoBrazo | 2 | 6x40x329 (x2) |  | VER CAD | envolvente |

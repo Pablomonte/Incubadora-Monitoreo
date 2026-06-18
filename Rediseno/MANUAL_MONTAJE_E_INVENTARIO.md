@@ -1,4 +1,4 @@
-# Manual de montaje e inventario — Incubadora LibreIncu (rediseño «Incubadora-Final»)
+# LibreIncu-150 — Manual de montaje e inventario
 
 > Guía práctica para **comprar, preparar, montar, cablear y poner en marcha** el rediseño.
 > No es un plano de taller: la geometría fina (agujeros, plegados, ángulos, tolerancias)
@@ -8,30 +8,16 @@
 
 ## 1. Alcance
 Este documento sirve como:
-- **Inventario mecánico** trazable al CAD maestro (`Rediseno/cad/inventario.md`).
+- **Inventario mecánico** de la incubadora.
 - **Guía de montaje** paso a paso.
 - **Base de compra, corte, preparación y verificación.**
 - **Referencia eléctrica y de puesta en marcha.**
 
-Las **dimensiones mecánicas provienen del *bounding box* (envolvente)** de cada pieza en el
-CAD. Sirven para comprar y cortar, **no** para ubicar agujeros, líneas de plegado ni ángulos.
-Donde haga falta geometría fina, el texto indica `VER CAD`.
+Las **dimensiones mecánicas provienen de la envolvente** de cada pieza en el CAD. Sirven para
+comprar y cortar, **no** para ubicar agujeros, líneas de plegado ni ángulos. Donde haga falta
+geometría fina, el texto indica `VER CAD`.
 
-## 2. Fuentes del documento
-| Tema | Fuente válida |
-|---|---|
-| Mecánica | `Rediseno/Incubadora-Final.3dm` (única fuente; export `.stp`/`.igs` del mismo modelo) |
-| Inventario extraído | `Rediseno/cad/inventario.md` · `.csv` · `.json` (generados por `extract_cad.py`) |
-| Electrónica general | `HardWare/Electro/NOMENCLATURA_LibreIncu.md`, `EsquemaLibreIncu.qet`, `libreincu_BOM.csv` |
-| Placa de control | `HardWare/Electro/Olivia_control/v0.2/` |
-| Puesta en marcha | `src/embedded/README.md` + comportamiento del firmware |
-
-**Descartado para la mecánica del rediseño** (cambiaron rotación, dimensiones, materiales y
-disposición): `ALT-INC001-*` y `SistemaBasculantePlanos.pdf`.
-
-La **discrepancia eléctrica** (rótulo GPIO13/IO12) ya fue verificada: el esquema es correcto.
-
-## 3. Convenciones
+## 2. Convenciones
 - **`OK FABRICAR`** — hay datos suficientes aquí para comprar, cortar o preparar.
 - **`OK MONTAR`** — pieza/subconjunto listo para ensamblar.
 - **`VER CAD`** — requiere la geometría fina del modelo maestro antes de fabricar.
@@ -47,14 +33,14 @@ Confianza de las medidas del inventario: `estandar` (pieza comercial que coincid
 - **Cerramiento:** chapa metálica plegada (`Chapa-*`, 1/8″ ≈ 3 mm), tableros **MDF 18 mm**,
   frente de **policarbonato** (`FRENTE-PC`, ~5×486×1189 mm).
 - **Bandejas:** fijas + móviles con `AcopleBandejaEje`, `HombroBandej`, guía `GUIA-CREMA`/`Cremayera`.
-- **Volteo:** **polea dentada + correa**, eje sobre rodamientos `624/626/HLM8UU`, buje **PTFE**,
+- **Volteo:** **polea dentada + cremallera**, eje sobre rodamientos `624/626/HLM8UU`, buje **PTFE**,
   acoples **PA6**, motorreductor 12 V; reemplaza al sistema impreso anterior.
 - **Puertas/tapas:** `U 2219 - Door`, `VentilacionDoor`, `Tapas`, bisagras `BisagraP`.
 
 ## 5. BOM consolidada
 
 ### 5.1 Mecánica (extraída del CAD)
-Inventario completo y trazable en **`Rediseno/cad/inventario.md`**. Resumen accionable:
+Inventario completo en la **sección Inventario CAD**. Resumen accionable:
 
 **Estructura — lista de corte de perfiles (`Perfil25-25`, `OK FABRICAR`):**
 
@@ -71,7 +57,7 @@ Inventario completo y trazable en **`Rediseno/cad/inventario.md`**. Resumen acci
 `Chapa-Paredon`, `Chapa-Caja`, `Chapa-SoporteInferior`, `ChapaCooler`; MDF 18 mm (paneles hasta
 784×1169 mm); frente policarbonato ~5×486×1189 mm.
 
-**Volteo — comprar:** `Rodamiento626` ×11, `Rodamiento624` ×3, `RodamientoHLM8UU` ×1, correa y
+**Volteo — comprar:** `Rodamiento626` ×11, `Rodamiento624` ×3, `RodamientoHLM8UU` ×1, cremallera y
 polea dentada. **Mecanizar/imprimir (`VER CAD`):** `PoleaDentada` (33×50×50), `AcoplesPA6`,
 `Buje-PTFE` (varilla ~311 mm), `ACOPLE 8 a 5`.
 
@@ -80,19 +66,19 @@ polea dentada. **Mecanizar/imprimir (`VER CAD`):** `PoleaDentada` (33×50×50), 
 
 > Las capas `Pelos`, `Letritas`, `Auxiliar*`, `Reguetones` son **referencia visual**, no se fabrican.
 
-### 5.2 Actuadores, sensores y alimentación (`libreincu_BOM.csv`)
+### 5.2 Actuadores, sensores y alimentación
 - **Fuente switching** 12 V 5 A ventilada · **step-down LM2596** (ajustar a 5 V).
 - **Resistencia calefactora 200 W** (tipo panchera) · **ventilador turbina 220 VAC 120 mm**.
 - **Bomba de agua** 12 VCC 4.3 LPM 35 PSI · **motorreductor** 12 V ~17 rpm (volteo).
 - **Sensor BME280** (temp/humedad/presión, I²C) · **2× reed switch** (finales de carrera).
 - **Protecciones:** disyuntor bipolar 2×25 A, termomagnéticas Q1–Q4, llaves on/off, prensacables.
 
-### 5.3 Placa de control Olivia v0.2 (`bill-of-materials-UPDATED.csv`)
+### 5.3 Placa de control Olivia v0.2
 - **MCU:** ESP32-WROOM-32D.
 - **Potencia AC:** 2× TRIAC BTA16-800B, opto-TRIAC MOC3041SM, opto TLP181 (cruce por cero).
 - **Alimentación on-board:** módulo HW-613 (DC-DC).
 - **Conectores:** Molex SL, Phoenix GMSTB, headers de programación.
-- Fabricación de la placa: Gerbers en `Olivia_control/v0.2/gerber/`, specs en `README_FABRICACION.md`.
+- Fabricar la placa con los **Gerbers** y la especificación provistos.
 
 ## 6. Preparación de piezas
 | Grupo | Acción | Estado |
@@ -123,15 +109,14 @@ Cada paso: *Piezas · Acción · Control dimensional · Riesgo · Resultado*.
 
 ## 8. Sistema de volteo (detalle)
 **Componentes:** motorreductor 12 V ~17 rpm · eje · rodamientos `624` (×3) / `626` (×11) / `HLM8UU` (×1)
-· buje **PTFE** (~311 mm) · **polea dentada** (33×50×50) + correa · acoples **PA6** · `AcopleBandejaEje`
+· buje **PTFE** (~311 mm) · **polea dentada** (33×50×50) + cremallera · acoples **PA6** · `AcopleBandejaEje`
 (×75) · `SoporT-AntiVib` · reeds superior/inferior (finales de carrera).
 
-**Montaje:** montar rodamientos en sus alojamientos → pasar el eje y el buje PTFE → fijar polea
-dentada y tensar la correa contra el piñón del motorreductor → acoplar las bandejas al eje
+**Montaje:** montar rodamientos en sus alojamientos → pasar el eje y el buje PTFE → fijar la polea
+dentada y engranarla con la cremallera → acoplar las bandejas al eje
 (`AcopleBandejaEje`) → ubicar reeds de fin de carrera arriba/abajo.
 
-`VER CAD` para: posición exacta de eje y soportes, alojamiento de rodamientos, **tensión y largo de
-correa**, y posición de los reeds. El control de giro lo hace el puente H (ver §9–§10).
+`VER CAD` para: posición exacta de eje y soportes, alojamiento de rodamientos, **engrane y posición de la cremallera**, y posición de los reeds. El control de giro lo hace el puente H (ver §9–§10).
 
 ## 9. Instalación eléctrica
 - **Gabinete eléctrico IP65** con riel DIN.
@@ -141,10 +126,10 @@ correa**, y posición de los reeds. El control de giro lo hace el puente H (ver 
 - **Cargas AC:** resistencia 200 W vía **TRIAC**, ventilador y luz.
 - **Cargas DC:** bomba (relé/MOSFET), motorreductor por **puente H L298**.
 - **Señales:** **BME280** (I²C), **2× reed** (finales de carrera) a la placa Olivia.
-- Respetar **separación AC/DC**, **puesta a tierra** y **prensacables**. Código de colores en
-  `NOMENCLATURA_LibreIncu.md`; diagrama en `Olivia_control/v0.2/esquematico.pdf`.
+- Respetar **separación AC/DC**, **puesta a tierra** y **prensacables**. Usar el **código de colores**
+  y el **esquemático** del proyecto.
 
-## 10. Mapa de señales (ESP32 / `NOMENCLATURA_LibreIncu.md`)
+## 10. Mapa de señales (ESP32)
 | GPIO | Señal | Destino |
 |---|---|---|
 | 2  | VOLTEO_UP / IN_A_N | L298 IN1 (subir) |
@@ -157,7 +142,7 @@ correa**, y posición de los reeds. El control de giro lo hace el puente H (ver 
 | 32 / 33 | SDA / SCL | BME280 (I²C) |
 
 ## 11. Puesta en marcha (checklist)
-> Se asume la placa Olivia **ya flasheada**. Para el firmware ver `src/embedded/README.md`.
+> Se asume la placa Olivia **ya flasheada**. El firmware se documenta aparte.
 
 - [ ] Inspección mecánica **sin tensión** (tornillería, holguras, giro libre del eje).
 - [ ] Continuidad y **puesta a tierra**; verificar **separación AC/DC**.
@@ -178,10 +163,57 @@ correa**, y posición de los reeds. El control de giro lo hace el puente H (ver 
 | No gira | Motorreductor, puente H L298 (GPIO13/2/15), atasco mecánico |
 | Gira al revés | Invertir cables del motor (o lógica IN_A_N/IN_A_P) |
 | No detecta reed | Continuidad del reed con imán, pull-up en GPIO34/35 |
-| Se traba el volteo | Tensión de correa, alineación de bujes PTFE, roce de bandejas (`VER CAD`) |
+| Se traba el volteo | Engrane polea–cremallera, alineación de bujes PTFE, roce de bandejas (`VER CAD`) |
 
-## 13. Anexos
-- **Inventario CAD completo:** `Rediseno/cad/inventario.md` (regenerable con `python3 Rediseno/extract_cad.py`).
-- **CAD maestro no versionado:** los binarios `.3dm/.stp/.igs` están en `.gitignore`; asegurarse de
-  tener el `Incubadora-Final.3dm` correcto antes de extraer datos.
-- **Código de colores y pines:** `HardWare/Electro/NOMENCLATURA_LibreIncu.md`.
+
+
+## 13. Galería de piezas fabricadas
+
+Vista isométrica del conjunto de piezas fabricadas:
+
+![Conjunto LibreIncu-150](img/piezas/_conjunto.png){ width=640 }
+
+### Estructura
+
+![Perfil25-25](img/piezas/perfil25-25.png){ width=320 }
+
+### Cerramiento
+
+| | |
+|---|---|
+| ![Chapa 1/8](img/piezas/chapa-1-8.png){ width=320 } | ![Chapa-Caja](img/piezas/chapa-caja.png){ width=320 } |
+| ![Chapa-Paredon](img/piezas/chapa-paredon.png){ width=320 } | ![Chapa-SoporteInferior](img/piezas/chapa-soporteinferior.png){ width=320 } |
+| ![ChapaCooler](img/piezas/chapacooler.png){ width=320 } | ![MDF18mm](img/piezas/mdf18mm.png){ width=320 } |
+| ![MDF55](img/piezas/mdf55.png){ width=320 } | ![FRENTE-PC](img/piezas/frente-pc.png){ width=320 } |
+
+### Puertas y tapas
+
+| | |
+|---|---|
+| ![U 2219 - Door](img/piezas/u-2219---door.png){ width=320 } | ![VentilacionDoor](img/piezas/ventilaciondoor.png){ width=320 } |
+| ![Tapas](img/piezas/tapas.png){ width=320 } | ![BisagraP](img/piezas/bisagrap.png){ width=320 } |
+
+### Bandejas
+
+| | |
+|---|---|
+| ![BandejasFijas](img/piezas/bandejasfijas.png){ width=320 } | ![huevera](img/piezas/huevera.png){ width=320 } |
+| ![HombroBandej](img/piezas/hombrobandej.png){ width=320 } | |
+
+### Volteo
+
+| | |
+|---|---|
+| ![PoleaDentada](img/piezas/poleadentada.png){ width=320 } | ![Cremayera](img/piezas/cremayera.png){ width=320 } |
+| ![GUIA-CREMA](img/piezas/guia-crema.png){ width=320 } | ![Buje-PTFE](img/piezas/buje-ptfe.png){ width=320 } |
+| ![FondoBrazo](img/piezas/fondobrazo.png){ width=320 } | ![Barra Avance Z](img/piezas/barra-avance-z.png){ width=320 } |
+| ![AcopleBandejaEje](img/piezas/acoplebandejaeje.png){ width=320 } | ![ACOPLE 8 a 5](img/piezas/acople-8-a-5.png){ width=320 } |
+| ![AcoplesPA6](img/piezas/acoplespa6.png){ width=320 } | ![SoporT-AntiVib](img/piezas/soport-antivib.png){ width=320 } |
+
+### Otros
+
+| | |
+|---|---|
+| ![BASE](img/piezas/base.png){ width=320 } | ![BoquillaAltaP](img/piezas/boquillaaltap.png){ width=320 } |
+| ![HerrajesTraseros](img/piezas/herrajestraseros.png){ width=320 } | ![SeparadorPAI](img/piezas/separadorpai.png){ width=320 } |
+
