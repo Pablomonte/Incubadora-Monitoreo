@@ -1,3 +1,7 @@
 Rediseno/*.3dm
 Rediseno/*.stp
 Rediseno/*.igs
+
+# MkDocs build
+site/
+.cache/

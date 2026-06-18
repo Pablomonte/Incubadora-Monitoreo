@@ -1,0 +1,1 @@
+--8<-- "cad/inventario.md"

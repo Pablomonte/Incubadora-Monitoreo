@@ -1,0 +1,50 @@
+site_name: LibreIncu — Incubadora (rediseño)
+site_description: Manual de montaje e inventario del rediseño de la incubadora LibreIncu
+site_url: https://pablomonte.github.io/Incubadora-Monitoreo/
+docs_dir: docs
+
+theme:
+  name: material
+  language: es
+  icon:
+    logo: material/egg
+  palette:
+    - scheme: default
+      primary: green
+      accent: light green
+      toggle:
+        icon: material/weather-night
+        name: Modo oscuro
+    - scheme: slate
+      primary: green
+      accent: light green
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro
+  features:
+    - navigation.top
+    - navigation.sections
+    - content.code.copy
+    - search.suggest
+
+nav:
+  - Inicio: index.md
+  - Manual de montaje: manual.md
+  - Inventario CAD: inventario.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path:
+        - .
+        - Rediseno
+      check_paths: true
+
+plugins:
+  - search
