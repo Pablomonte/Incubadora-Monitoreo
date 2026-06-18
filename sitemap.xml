@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://pablomonte.github.io/Incubadora-Monitoreo/</loc>
+         <loc>https://pablomonte.github.io/LibreIncu-150/</loc>
          <lastmod>2026-06-18</lastmod>
     </url>
     <url>
-         <loc>https://pablomonte.github.io/Incubadora-Monitoreo/inventario/</loc>
+         <loc>https://pablomonte.github.io/LibreIncu-150/inventario/</loc>
          <lastmod>2026-06-18</lastmod>
     </url>
     <url>
-         <loc>https://pablomonte.github.io/Incubadora-Monitoreo/manual/</loc>
+         <loc>https://pablomonte.github.io/LibreIncu-150/manual/</loc>
+         <lastmod>2026-06-18</lastmod>
+    </url>
+    <url>
+         <loc>https://pablomonte.github.io/LibreIncu-150/img/piezas/manifiesto/</loc>
          <lastmod>2026-06-18</lastmod>
     </url>
 </urlset>

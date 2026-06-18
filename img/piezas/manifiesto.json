@@ -1,0 +1,235 @@
+{
+  "aceptacion_completa": true,
+  "gmsh_diagnostico": {
+    "ok": true,
+    "source": "stp",
+    "entities_3d": 1225,
+    "entities_2d": 13942,
+    "bbox_mm": [
+      608.7032651652695,
+      1213.0200270087153,
+      1063.85285237446
+    ],
+    "centroid_match": null,
+    "note": "Envolvente OK: 608.7 x 1213.0 x 1063.9 mm"
+  },
+  "gmsh_centroid_match": {
+    "matched": 10968,
+    "ambiguous": 4199,
+    "total_entities": 15167
+  },
+  "render_method": "rhino3dm_native_meshes",
+  "nota": "El mallado OCC completo del STEP falla con 'overlapping facets'; las imagenes se generaron a partir de las mallas nativas de rhino3dm (Extrusion.GetMesh / BrepFace.GetMesh), preservando la identidad por capa.",
+  "piezas": [
+    {
+      "slug": "perfil25-25",
+      "pieza": "Perfil25-25",
+      "estado": "rendered",
+      "triangulos": 13259,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "chapa-1-8",
+      "pieza": "Chapa 1/8",
+      "estado": "rendered",
+      "triangulos": 18380,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "chapa-soporteinferior",
+      "pieza": "Chapa-SoporteInferior",
+      "estado": "rendered",
+      "triangulos": 1566,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "mdf18mm",
+      "pieza": "MDF18mm",
+      "estado": "rendered",
+      "triangulos": 7176,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "chapacooler",
+      "pieza": "ChapaCooler",
+      "estado": "rendered",
+      "triangulos": 5247,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "chapa-paredon",
+      "pieza": "Chapa-Paredon",
+      "estado": "rendered",
+      "triangulos": 8080,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "frente-pc",
+      "pieza": "FRENTE-PC",
+      "estado": "rendered",
+      "triangulos": 4744,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "mdf55",
+      "pieza": "MDF55",
+      "estado": "rendered",
+      "triangulos": 1436,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "chapa-caja",
+      "pieza": "Chapa-Caja",
+      "estado": "rendered",
+      "triangulos": 3980,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "tapas",
+      "pieza": "Tapas",
+      "estado": "rendered",
+      "triangulos": 2164,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "u-2219---door",
+      "pieza": "U 2219 - Door",
+      "estado": "rendered",
+      "triangulos": 8172,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "bisagrap",
+      "pieza": "BisagraP",
+      "estado": "rendered",
+      "triangulos": 2496,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "ventilaciondoor",
+      "pieza": "VentilacionDoor",
+      "estado": "rendered",
+      "triangulos": 19720,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "huevera",
+      "pieza": "huevera",
+      "estado": "rendered",
+      "triangulos": 1217,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "bandejasfijas",
+      "pieza": "BandejasFijas",
+      "estado": "rendered",
+      "triangulos": 15998,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "hombrobandej",
+      "pieza": "HombroBandej",
+      "estado": "rendered",
+      "triangulos": 58332,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "acoplebandejaeje",
+      "pieza": "AcopleBandejaEje",
+      "estado": "rendered",
+      "triangulos": 118914,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "acople-8-a-5",
+      "pieza": "ACOPLE 8 a 5",
+      "estado": "rendered",
+      "triangulos": 295376,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "cremayera",
+      "pieza": "Cremayera",
+      "estado": "rendered",
+      "triangulos": 23672,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "acoplespa6",
+      "pieza": "AcoplesPA6",
+      "estado": "rendered",
+      "triangulos": 6794,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "guia-crema",
+      "pieza": "GUIA-CREMA",
+      "estado": "rendered",
+      "triangulos": 4194,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "barra-avance-z",
+      "pieza": "Barra Avance Z",
+      "estado": "rendered",
+      "triangulos": 552494,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "buje-ptfe",
+      "pieza": "Buje-PTFE",
+      "estado": "rendered",
+      "triangulos": 1036,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "fondobrazo",
+      "pieza": "FondoBrazo",
+      "estado": "rendered",
+      "triangulos": 9760,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "poleadentada",
+      "pieza": "PoleaDentada",
+      "estado": "rendered",
+      "triangulos": 3928,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "soport-antivib",
+      "pieza": "SoporT-AntiVib",
+      "estado": "rendered",
+      "triangulos": 2968,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "base",
+      "pieza": "BASE",
+      "estado": "rendered",
+      "triangulos": 197582,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "boquillaaltap",
+      "pieza": "BoquillaAltaP",
+      "estado": "rendered",
+      "triangulos": 13292,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "herrajestraseros",
+      "pieza": "HerrajesTraseros",
+      "estado": "rendered",
+      "triangulos": 7668,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    },
+    {
+      "slug": "separadorpai",
+      "pieza": "SeparadorPAI",
+      "estado": "rendered",
+      "triangulos": 3376,
+      "motivo": "renderizado desde mallas nativas de rhino3dm"
+    }
+  ]
+}
