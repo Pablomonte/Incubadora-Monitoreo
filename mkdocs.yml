@@ -1,6 +1,6 @@
-site_name: LibreIncu — Incubadora (rediseño)
-site_description: Manual de montaje e inventario del rediseño de la incubadora LibreIncu
-site_url: https://pablomonte.github.io/Incubadora-Monitoreo/
+site_name: LibreIncu-150
+site_description: Manual de montaje e inventario de la incubadora LibreIncu-150
+site_url: https://pablomonte.github.io/LibreIncu-150/
 docs_dir: docs
 
 theme:
