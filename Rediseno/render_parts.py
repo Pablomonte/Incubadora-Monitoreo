@@ -1,45 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-render_parts.py — Renderiza una imagen por pieza fabricada del CAD maestro.
+"""Renderiza piezas, subconjuntos, locators y conjunto desde Incubadora-Final.3dm."""
 
-Fuente de identidad: objetos del .3dm agrupados por capa (hoja).
-Estrategia:
-  - Extrusiones -> GetMesh(MeshType.Any) (identidad exacta).
-  - Breps -> BrepFace.GetMesh() por cara; se combinan (identidad exacta por cara).
-  - Si una pieza no aporta malla, se reporta en el manifiesto como VER CAD.
+from __future__ import annotations
 
-Nota sobre gmsh/OCC:
-  Se carga el STEP en gmsh para diagnosticar entidades, validar la envolvente global
-  y contrastar el conteo con los objetos Rhino. El mallado OCC del modelo completo
-  falla con "overlapping facets"; por eso el render final se hace desde las mallas
-  nativas de rhino3dm, preservando la identidad de cada objeto.
-
-Salidas:
-  docs/img/piezas/<slug>.png       — una por pieza fabricada.
-  docs/img/piezas/_conjunto.png    — vista isometrica de todas las piezas juntas.
-  docs/img/piezas/manifiesto.md    — resumen legible.
-  docs/img/piezas/manifiesto.json  — resumen maquina.
-"""
-
+import argparse
 import json
-import math
 import os
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
+from dataclasses import dataclass
+from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.colors import LightSource
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from matplotlib.colors import LightSource, to_rgba_array
 import numpy as np
 import rhino3dm
 
-# --------------------------------------------------------------------------- #
-# gmsh: requerido al menos para el diagnostico; el script aborta si falta.
-# --------------------------------------------------------------------------- #
+from cad_common import (
+    AMBIENT,
+    BLUE,
+    CAMERA,
+    COMPONENT_ORDER,
+    DPI,
+    EDGE_MAX_FACES,
+    GHOST,
+    MODEL_3DM,
+    RED,
+    VISUAL,
+    bbox_to_bounds,
+    build_layer_index,
+    component_label,
+    component_of,
+    component_rank,
+    include_in_locator_context,
+    reconcile_envelope,
+    slugify,
+    sorted_dims,
+)
+
 try:
     import gmsh
     HAS_GMSH = True
@@ -48,239 +51,38 @@ except Exception as exc:  # pragma: no cover
     GMSH_IMPORT_ERROR = str(exc)
 
 
-# --------------------------------------------------------------------------- #
-# Paths
-# --------------------------------------------------------------------------- #
-HERE = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(HERE)
-REDISENO = HERE
-CAD_DIR = os.path.join(REDISENO, "cad")
-MODEL_3DM = os.path.join(REDISENO, "Incubadora-Final.3dm")
-MODEL_STP = os.path.join(REDISENO, "Incubadora-Final.stp")
-MODEL_IGS = os.path.join(REDISENO, "Incubadora-Final.igs")
-OUT_DIR = os.path.join(REPO, "docs", "img", "piezas")
+HERE = Path(__file__).resolve().parent
+REPO = HERE.parent
+CAD_DIR = HERE / "cad"
+MODEL_PATH = HERE / MODEL_3DM
+MODEL_STP = HERE / "Incubadora-Final.stp"
+MODEL_IGS = HERE / "Incubadora-Final.igs"
+PIECE_DIR = REPO / "docs" / "img" / "piezas"
+COMPONENT_DIR = REPO / "docs" / "img" / "componentes"
 
-EXPECTED_ENVELOPE_MM = (605.0, 1264.0, 1189.0)
-BBOX_TOLERANCE = 0.20
+MAX_LOCATOR_TRIANGLES = 400_000
+MAX_COMPONENT_TRIANGLES = 250_000
 
 
-# --------------------------------------------------------------------------- #
-# Utilidades
-# --------------------------------------------------------------------------- #
-def slugify(name: str) -> str:
-    """Slug seguro para nombre de archivo."""
-    s = name.lower().strip().replace(" ", "-").replace("/", "-").replace(":", "-")
-    s = re.sub(r"[^a-z0-9_-]+", "", s)
-    return s or "pieza"
+@dataclass
+class Group:
+    verts: np.ndarray
+    faces: np.ndarray
+    rgb: tuple[float, float, float, float]
+    alpha: float = 1.0
+    shaded: bool = True
+    edge: bool = False
 
 
-def safe_finally(finalizer):
-    """Ejecuta finalizer ignorando errores."""
-    try:
-        finalizer()
-    except Exception:
-        pass
-
-
-# --------------------------------------------------------------------------- #
-# Inventario y objetos Rhino
-# --------------------------------------------------------------------------- #
-def load_inventory():
-    """Carga inventario.json y devuelve solo piezas a renderizar."""
-    path = os.path.join(CAD_DIR, "inventario.json")
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    target = [
-        r for r in data["piezas"]
-        if r["categoria"] != "visual" and r["fabricacion"] != "comprar"
-    ]
-    return target
-
-
-def build_layer_index(model):
-    """Devuelve {layer_index: (ruta_completa, nombre_hoja)}."""
-    layers = list(model.Layers)
-    by_id = {str(l.Id): l for l in layers}
-    NULL_GUID = "00000000-0000-0000-0000-000000000000"
-    out = {}
-    for i, l in enumerate(layers):
-        parts = [l.Name]
-        pid = str(l.ParentLayerId)
-        seen = set()
-        while pid and pid != NULL_GUID and pid not in seen:
-            seen.add(pid)
-            p = by_id.get(pid)
-            if not p:
-                break
-            parts.insert(0, p.Name)
-            pid = str(p.ParentLayerId)
-        out[i] = ("::".join(parts), l.Name)
-    return out
-
-
-def load_rhino_objects(model_path: str):
-    """Lee el .3dm y devuelve lista de objetos con capa, centroide, bbox y geometria."""
-    if not os.path.exists(model_path):
-        raise SystemExit(f"No se encontro el CAD maestro: {model_path}")
-    model = rhino3dm.File3dm.Read(model_path)
-    layer_idx = build_layer_index(model)
-    objs = []
-    for obj in model.Objects:
-        attr = obj.Attributes
-        geom = obj.Geometry
-        path, leaf = layer_idx.get(attr.LayerIndex, ("?", "?"))
-        bb = geom.GetBoundingBox()
-        centroid = (
-            (bb.Min.X + bb.Max.X) / 2.0,
-            (bb.Min.Y + bb.Max.Y) / 2.0,
-            (bb.Min.Z + bb.Max.Z) / 2.0,
-        )
-        objs.append({
-            "path": path,
-            "leaf": leaf,
-            "centroid": centroid,
-            "bbox": (bb.Min.X, bb.Min.Y, bb.Min.Z, bb.Max.X, bb.Max.Y, bb.Max.Z),
-            "geom": geom,
-            "type": type(geom).__name__,
-        })
-    return objs
-
-
-# --------------------------------------------------------------------------- #
-# gmsh / OCC: solo diagnostico y validacion
-# --------------------------------------------------------------------------- #
-def gmsh_diagnostic():
-    """Carga STEP en gmsh, reporta entidades y valida envolvente. Retorna dict."""
-    if not HAS_GMSH:
-        return {
-            "ok": False,
-            "source": "ninguno",
-            "entities_3d": 0,
-            "entities_2d": 0,
-            "bbox_mm": None,
-            "centroid_match": None,
-            "note": f"gmsh no disponible: {GMSH_IMPORT_ERROR}",
-        }
-
-    source = None
-    for candidate, label in ((MODEL_STP, "stp"), (MODEL_IGS, "igs")):
-        if not os.path.exists(candidate):
-            continue
-        gmsh.initialize()
-        gmsh.option.setNumber("General.Terminal", 0)
-        try:
-            gmsh.open(candidate)
-            source = label
-            break
-        except Exception as exc:
-            safe_finally(gmsh.finalize)
-            last_err = str(exc)
-    if source is None:
-        return {
-            "ok": False,
-            "source": "ninguno",
-            "entities_3d": 0,
-            "entities_2d": 0,
-            "bbox_mm": None,
-            "centroid_match": None,
-            "note": "No se pudo abrir ni .stp ni .igs con gmsh/OCC",
-        }
-
-    try:
-        e3 = gmsh.model.getEntities(3)
-        e2 = gmsh.model.getEntities(2)
-        bb = gmsh.model.getBoundingBox(-1, -1)
-        bbox = (bb[3] - bb[0], bb[4] - bb[1], bb[5] - bb[2])
-
-        # Validacion de envolvente
-        ok = True
-        note_parts = []
-        for i, (dim, name) in enumerate(zip(bbox, ("ancho", "prof", "alto"))):
-            exp = EXPECTED_ENVELOPE_MM[i]
-            rel = abs(dim - exp) / exp if exp else 0
-            if rel > BBOX_TOLERANCE:
-                ok = False
-                note_parts.append(f"{name}={dim:.1f} (esperado ~{exp})")
-        if not ok:
-            note = "Envolvente fuera de tolerancia: " + ", ".join(note_parts)
-        else:
-            note = f"Envolvente OK: {bbox[0]:.1f} x {bbox[1]:.1f} x {bbox[2]:.1f} mm"
-
-        return {
-            "ok": ok,
-            "source": source,
-            "entities_3d": len(e3),
-            "entities_2d": len(e2),
-            "bbox_mm": bbox,
-            "centroid_match": None,
-            "note": note,
-        }
-    except Exception as exc:
-        return {
-            "ok": False,
-            "source": source,
-            "entities_3d": 0,
-            "entities_2d": 0,
-            "bbox_mm": None,
-            "centroid_match": None,
-            "note": f"Error gmsh: {exc}",
-        }
-    finally:
-        safe_finally(gmsh.finalize)
-
-
-def match_centroids(rhino_objs, tolerance=10.0):
-    """Match centroide gmsh -> objeto Rhino; retorna conteo de ambiguos."""
-    if not HAS_GMSH:
-        return None, 0
-    gmsh.initialize()
-    gmsh.option.setNumber("General.Terminal", 0)
-    try:
-        gmsh.open(MODEL_STP)
-        e3 = gmsh.model.getEntities(3)
-        e2 = gmsh.model.getEntities(2)
-        entities = e3 + e2
-        ambiguous = 0
-        matched = 0
-        for dim, tag in entities:
-            try:
-                cg = gmsh.model.occ.getCenterOfMass(dim, tag)
-            except Exception:
-                continue
-            best = None
-            best_d = float("inf")
-            for o in rhino_objs:
-                c = o["centroid"]
-                d = math.dist(cg, c)
-                if d < best_d:
-                    best_d = d
-                    best = o
-            if best and best_d <= tolerance:
-                matched += 1
-            else:
-                ambiguous += 1
-        return {"matched": matched, "ambiguous": ambiguous, "total_entities": len(entities)}, ambiguous
-    except Exception as exc:
-        return {"error": str(exc)}, 1
-    finally:
-        safe_finally(gmsh.finalize)
-
-
-# --------------------------------------------------------------------------- #
-# Extraccion de mallas desde rhino3dm
-# --------------------------------------------------------------------------- #
 def mesh_to_arrays(mesh):
-    """Convierte rhino3dm.Mesh a (vertices, faces)."""
     if mesh is None or len(mesh.Vertices) == 0:
         return None, None
     verts = np.array([[v.X, v.Y, v.Z] for v in mesh.Vertices], dtype=float)
     faces = []
     for i in range(len(mesh.Faces)):
         a, b, c, d = mesh.Faces[i]
-        if c == d:
-            faces.append([a, b, c])
-        else:
-            faces.append([a, b, c])
+        faces.append([a, b, c])
+        if c != d:
             faces.append([a, c, d])
     if not faces:
         return None, None
@@ -288,312 +90,483 @@ def mesh_to_arrays(mesh):
 
 
 def get_mesh_from_geometry(geom):
-    """Devuelve (vertices, faces) de una geometria Rhino."""
-    t = type(geom).__name__
-    if t == "Extrusion":
+    geom_type = type(geom).__name__
+    if geom_type == "Extrusion":
         return mesh_to_arrays(geom.GetMesh(rhino3dm.MeshType.Any))
-    if t == "Brep":
-        all_v = []
-        all_f = []
-        offset = 0
+    if geom_type == "Brep":
+        verts, faces, offset = [], [], 0
         for face in geom.Faces:
             try:
                 v, f = mesh_to_arrays(face.GetMesh(rhino3dm.MeshType.Any))
-                if v is None:
-                    continue
-                all_v.append(v)
-                all_f.append(f + offset)
-                offset += len(v)
             except Exception:
                 continue
-        if all_v:
-            return np.vstack(all_v), np.vstack(all_f)
+            if v is None:
+                continue
+            verts.append(v)
+            faces.append(f + offset)
+            offset += len(v)
+        if verts:
+            return np.vstack(verts), np.vstack(faces)
     return None, None
 
 
-# --------------------------------------------------------------------------- #
-# Render con matplotlib
-# --------------------------------------------------------------------------- #
-def render_mesh(verts, faces, output_path, title=None, dims_mm=None,
-                elev=22, azim=-60, dpi=200):
-    """Render isometrico sombreado de una malla: aspecto real, caras opacas."""
-    if len(faces) == 0:
-        raise ValueError("No hay caras para renderizar")
+def load_inventory():
+    path = CAD_DIR / "inventario.json"
+    if not path.exists():
+        raise SystemExit("Falta Rediseno/cad/inventario.json. Ejecutar primero Rediseno/extract_cad.py")
+    with path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    rows = data.get("maestro") or data.get("piezas") or []
+    return data, rows
+
+
+def load_rhino_objects():
+    if not MODEL_PATH.exists():
+        raise SystemExit(f"No se encontro el CAD maestro: {MODEL_PATH}")
+    model = rhino3dm.File3dm.Read(str(MODEL_PATH))
+    layer_idx = build_layer_index(model)
+    objects = []
+    for obj in model.Objects:
+        geom = obj.Geometry
+        path, leaf = layer_idx.get(obj.Attributes.LayerIndex, ("?", "?"))
+        try:
+            bb = geom.GetBoundingBox()
+            bounds = bbox_to_bounds(bb)
+            centroid = tuple((bounds.min[i] + bounds.max[i]) / 2.0 for i in range(3))
+        except Exception:
+            bounds = None
+            centroid = None
+        objects.append({
+            "path": path,
+            "leaf": leaf,
+            "component": component_of(leaf),
+            "bounds": bounds,
+            "centroid": centroid,
+            "geom": geom,
+            "type": type(geom).__name__,
+        })
+    return objects
+
+
+def build_mesh_cache(objects):
+    by_leaf = defaultdict(list)
+    stats = {}
+    for obj in objects:
+        by_leaf[obj["leaf"]].append(obj)
+
+    cache = {}
+    for leaf, objs in sorted(by_leaf.items()):
+        verts, faces, offset = [], [], 0
+        type_counts = Counter()
+        for obj in objs:
+            type_counts[obj["type"]] += 1
+            v, f = get_mesh_from_geometry(obj["geom"])
+            if v is None:
+                continue
+            verts.append(v)
+            faces.append(f + offset)
+            offset += len(v)
+        if verts:
+            cache[leaf] = (np.vstack(verts), np.vstack(faces))
+        stats[leaf] = {
+            "object_count": len(objs),
+            "geometry_types": dict(sorted(type_counts.items())),
+            "tri_count": int(sum(len(f) for f in faces)),
+            "status": "renderable" if verts else "no_mallable",
+        }
+    if not cache:
+        raise SystemExit("No se pudo mallar ninguna capa del CAD")
+    return cache, stats
+
+
+def gmsh_diagnostic():
+    if not HAS_GMSH:
+        return {"ok": False, "source": "ninguno", "note": f"gmsh no disponible: {GMSH_IMPORT_ERROR}"}
+    source_path = None
+    source = "ninguno"
+    for candidate, label in ((MODEL_STP, "stp"), (MODEL_IGS, "igs")):
+        if candidate.exists():
+            source_path = candidate
+            source = label
+            break
+    if source_path is None:
+        return {"ok": False, "source": source, "note": "No hay STEP/IGS para diagnostico gmsh"}
+    gmsh.initialize()
+    gmsh.option.setNumber("General.Terminal", 0)
+    try:
+        gmsh.open(str(source_path))
+        e3 = gmsh.model.getEntities(3)
+        e2 = gmsh.model.getEntities(2)
+        bb = gmsh.model.getBoundingBox(-1, -1)
+        bbox = [round(bb[3] - bb[0], 1), round(bb[4] - bb[1], 1), round(bb[5] - bb[2], 1)]
+        return {
+            "ok": True,
+            "source": source,
+            "entities_3d": len(e3),
+            "entities_2d": len(e2),
+            "bbox_mm": bbox,
+            "note": f"Diagnostico gmsh OK desde {source}",
+        }
+    except Exception as exc:
+        return {"ok": False, "source": source, "note": f"Error gmsh: {exc}"}
+    finally:
+        try:
+            gmsh.finalize()
+        except Exception:
+            pass
+
+
+def mesh_bounds(meshes):
+    verts = [mesh[0] for mesh in meshes if mesh is not None and len(mesh[0])]
+    if not verts:
+        return None
+    all_v = np.vstack(verts)
+    return all_v.min(axis=0), all_v.max(axis=0)
+
+
+def combine_meshes(meshes):
+    verts, faces, offset = [], [], 0
+    for mesh in meshes:
+        if mesh is None:
+            continue
+        v, f = mesh
+        verts.append(v)
+        faces.append(f + offset)
+        offset += len(v)
+    if not verts:
+        return None
+    return np.vstack(verts), np.vstack(faces)
+
+
+def limit_layers(layer_meshes, max_triangles, protected=()):
+    protected = set(protected)
+    kept = dict(layer_meshes)
+    omitted = []
+    total = sum(len(f) for _, f in kept.values())
+    for leaf in sorted(kept, key=lambda k: (k in protected, len(kept[k][1])), reverse=True):
+        if total <= max_triangles:
+            break
+        if leaf in protected:
+            continue
+        total -= len(kept[leaf][1])
+        omitted.append({"capa": leaf, "tri_count": int(len(kept[leaf][1])), "motivo": "omitida por presupuesto"})
+        del kept[leaf]
+    return kept, omitted
+
+
+def render_groups(groups, output_path, *, xlim=None, ylim=None, zlim=None, title=None, dims_mm=None):
     fig = plt.figure(figsize=(7, 7))
     ax = fig.add_subplot(111, projection="3d")
-
-    polys = verts[faces]
-    normals = np.cross(polys[:, 1] - polys[:, 0], polys[:, 2] - polys[:, 0])
-    norms = np.linalg.norm(normals, axis=1, keepdims=True)
-    norms[norms == 0] = 1.0
-    normals = normals / norms
     ls = LightSource(azdeg=315, altdeg=45)
-    intensity = ls.shade_normals(normals)                 # (N,) en [0, 1]
+    all_verts = []
 
-    # Sombreado opaco con termino ambiente (solo RGB; alfa fijo = 1).
-    AMB = 0.35
-    base_rgb = to_rgba_array("tab:blue")[0, :3]            # RGB (3,)
-    shaded = base_rgb[None, :] * (AMB + (1.0 - AMB) * intensity[:, None])
-    facecolors = np.ones((len(faces), 4))
-    facecolors[:, :3] = np.clip(shaded, 0.0, 1.0)
+    for group in groups:
+        if group.verts is None or group.faces is None or len(group.faces) == 0:
+            continue
+        all_verts.append(group.verts)
+        polys = group.verts[group.faces]
+        base_rgb = np.array(group.rgb[:3], dtype=float)
+        if group.shaded:
+            normals = np.cross(polys[:, 1] - polys[:, 0], polys[:, 2] - polys[:, 0])
+            norms = np.linalg.norm(normals, axis=1, keepdims=True)
+            norms[norms == 0] = 1.0
+            intensity = ls.shade_normals(normals / norms)
+            shaded = base_rgb[None, :] * (AMBIENT + (1.0 - AMBIENT) * intensity[:, None])
+        else:
+            shaded = np.repeat(base_rgb[None, :], len(group.faces), axis=0)
+        colors = np.ones((len(group.faces), 4))
+        colors[:, :3] = np.clip(shaded, 0.0, 1.0)
+        colors[:, 3] = group.alpha
+        if group.edge and len(group.faces) <= EDGE_MAX_FACES:
+            edgecolors = (0.0, 0.0, 0.0, 0.35)
+            linewidths = 0.15
+        else:
+            edgecolors = "none"
+            linewidths = 0.0
+        ax.add_collection3d(Poly3DCollection(polys, facecolors=colors, edgecolors=edgecolors, linewidths=linewidths))
 
-    # Aristas sutiles solo en mallas chicas (definicion sin emborronar).
-    if len(faces) <= 6000:
-        edgecolors = (0.0, 0.0, 0.0, 0.25)
-        linewidths = 0.1
-    else:
-        edgecolors = "none"
-        linewidths = 0.0
+    if not all_verts:
+        raise ValueError("No hay geometria para renderizar")
 
-    coll = Poly3DCollection(polys, facecolors=facecolors,
-                            edgecolors=edgecolors, linewidths=linewidths)
-    ax.add_collection3d(coll)
-
-    spans = verts.max(axis=0) - verts.min(axis=0)
+    verts = np.vstack(all_verts)
+    if xlim is None or ylim is None or zlim is None:
+        mins = verts.min(axis=0)
+        maxs = verts.max(axis=0)
+        spans = np.maximum(maxs - mins, 1.0)
+        margin = float(spans.max()) * 0.04
+        xlim = (mins[0] - margin, maxs[0] + margin)
+        ylim = (mins[1] - margin, maxs[1] + margin)
+        zlim = (mins[2] - margin, maxs[2] + margin)
+    ax.set_xlim(*xlim)
+    ax.set_ylim(*ylim)
+    ax.set_zlim(*zlim)
+    spans = np.array([xlim[1] - xlim[0], ylim[1] - ylim[0], zlim[1] - zlim[0]], dtype=float)
     max_span = float(spans.max()) or 1.0
-    margin = max_span * 0.04
-    ax.set_xlim(verts[:, 0].min() - margin, verts[:, 0].max() + margin)
-    ax.set_ylim(verts[:, 1].min() - margin, verts[:, 1].max() + margin)
-    ax.set_zlim(verts[:, 2].min() - margin, verts[:, 2].max() + margin)
-    # Aspecto real con piso minimo para que piezas planas no queden invisibles.
     ax.set_box_aspect(np.maximum(spans, max_span * 0.03))
-    ax.view_init(elev=elev, azim=azim)
+    ax.view_init(**CAMERA)
     ax.set_axis_off()
     if title:
         ax.set_title(title, fontsize=9, pad=0)
     if dims_mm:
-        fig.text(0.5, 0.02,
-                 f"{dims_mm[0]:.0f} x {dims_mm[1]:.0f} x {dims_mm[2]:.0f} mm",
-                 ha="center", fontsize=7, color="0.5")
-    fig.savefig(output_path, dpi=dpi, bbox_inches="tight", pad_inches=0.05)
+        fig.text(0.5, 0.02, " x ".join(f"{v:.0f}" for v in dims_mm) + " mm", ha="center", fontsize=7, color="0.5")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, dpi=DPI, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
 
-# --------------------------------------------------------------------------- #
-# Main
-# --------------------------------------------------------------------------- #
-def main():
-    if not HAS_GMSH:
-        raise SystemExit(
-            "ERROR: falta el modulo gmsh. "
-            "Crear el entorno e instalar: python3 -m venv .venv-render && "
-            ".venv-render/bin/pip install gmsh rhino3dm matplotlib numpy"
-        )
+def render_mesh(mesh, output_path, *, title=None, dims_mm=None):
+    verts, faces = mesh
+    render_groups([Group(verts, faces, BLUE, 1.0, True, True)], output_path, title=title, dims_mm=dims_mm)
 
-    os.makedirs(OUT_DIR, exist_ok=True)
 
-    inventory = load_inventory()
-    print(f"Piezas objetivo a renderizar: {len(inventory)}")
-    for r in inventory:
-        print(f"  - {slugify(r['pieza'])}  ({r['pieza']})")
-
-    print(f"\nLeyendo CAD maestro: {MODEL_3DM}")
-    rhino_objs = load_rhino_objects(MODEL_3DM)
-    print(f"  Objetos Rhino: {len(rhino_objs)}")
-
+def leaf_titles(rows):
     by_leaf = defaultdict(list)
-    for o in rhino_objs:
-        by_leaf[o["leaf"]].append(o)
+    for row in rows:
+        by_leaf[row.get("leaf") or row.get("pieza")].append(row)
+    titles = {}
+    for leaf, items in by_leaf.items():
+        items = sorted(items, key=lambda r: r.get("n") or 999999)
+        nums = [str(r["n"]) for r in items if r.get("n") is not None]
+        title_num = nums[0] if len(nums) == 1 else f"{nums[0]}-{nums[-1]}" if nums else ""
+        name = items[0].get("nombre") or leaf
+        # La imagen es UNA instancia representativa; quitar el tamano del titulo para
+        # que no contradiga las dims reales del pie (varias instancias = varios tamanos).
+        name = re.sub(r"\s+\d+x\d+x\d+$", "", name)
+        titles[leaf] = f"{title_num} - {name}" if title_num else name
+    return titles, by_leaf
 
-    print("\nDiagnostico gmsh/OCC...")
-    diag = gmsh_diagnostic()
-    print(f"  Fuente: {diag['source']}")
-    print(f"  Entidades 3D: {diag['entities_3d']}, 2D: {diag['entities_2d']}")
-    print(f"  Envolvente gmsh: {diag['bbox_mm']}")
-    print(f"  {diag['note']}")
 
-    print("\nAlineacion centroide gmsh -> Rhino...")
-    match_info, ambiguous = match_centroids(rhino_objs)
-    if match_info:
-        print(f"  {match_info}")
-    if ambiguous > len(rhino_objs) * 0.10:
-        print(f"  ADVERTENCIA: {ambiguous} entidades gmsh no alinearon con objetos Rhino")
-
-    # Render individual por pieza
+def render_pieces(cache, stats, rows, objects):
+    titles, rows_by_leaf = leaf_titles(rows)
+    objs_by_leaf = defaultdict(list)
+    for obj in objects:
+        objs_by_leaf[obj["leaf"]].append(obj)
     manifest = []
-    complete = True
-    print("\nRenderizando piezas individuales...")
-    for r in inventory:
-        leaf = r["pieza"]
+    candidate_leaves = sorted({
+        leaf for leaf, items in rows_by_leaf.items()
+        if items[0].get("component") not in {"visual", "tornilleria"} and items[0].get("fabricacion") != "comprar"
+    }, key=lambda leaf: min((r.get("n") or 999999) for r in rows_by_leaf[leaf]))
+    for leaf in candidate_leaves:
         slug = slugify(leaf)
-        objs = by_leaf.get(leaf, [])
-        if not objs:
-            manifest.append({
-                "slug": slug,
-                "pieza": leaf,
-                "estado": "skipped",
-                "triangulos": 0,
-                "motivo": "sin objetos en el CAD maestro",
-            })
-            complete = False
-            print(f"  [SKIP] {slug}: sin objetos")
+        # Imagen de UNA instancia representativa (limpia y liviana); fallback a la capa combinada.
+        mesh = representative_mesh(objs_by_leaf.get(leaf, [])) or cache.get(leaf)
+        if mesh is None:
+            manifest.append({"slug": slug, "pieza": leaf, "estado": "no_mallable", "tri_count": 0, "motivo": "VER CAD"})
+            print(f"  [SKIP] pieza {slug}: no mallable")
+            continue
+        dims = sorted_dims_from_mesh(mesh)
+        tri = int(len(mesh[1]))
+        render_mesh(mesh, PIECE_DIR / f"{slug}.png", title=titles.get(leaf, leaf), dims_mm=dims)
+        manifest.append({"slug": slug, "pieza": leaf, "estado": "rendered", "tri_count": tri,
+                         "tri_count_capa": stats[leaf]["tri_count"], "dims_mm": dims})
+        print(f"  [OK] pieza {slug}: {tri} triangulos (capa: {stats[leaf]['tri_count']})")
+    return manifest
+
+
+def sorted_dims_from_mesh(mesh):
+    verts, _faces = mesh
+    return sorted(round(float(verts.max(axis=0)[i] - verts.min(axis=0)[i]), 1) for i in range(3))
+
+
+def _bbox_diag(bounds):
+    if bounds is None:
+        return 0.0
+    return sum((bounds.max[i] - bounds.min[i]) ** 2 for i in range(3)) ** 0.5
+
+
+def representative_mesh(objs):
+    """Malla de UNA instancia representativa (la de mayor diagonal de bbox) de la capa.
+
+    Para capas con muchas instancias (p. ej. AcopleBandejaEje x75) muestra una pieza
+    limpia en vez de todas las copias dispersas, y es mucho mas liviana de renderizar.
+    """
+    ordered = sorted(objs, key=lambda o: _bbox_diag(o.get("bounds")), reverse=True)
+    for obj in ordered:
+        v, f = get_mesh_from_geometry(obj["geom"])
+        if v is not None:
+            return v, f
+    return None
+
+
+def render_components(cache, rows):
+    leaves_by_component = defaultdict(set)
+    for row in rows:
+        component = row.get("component") or component_of(row.get("leaf") or row.get("pieza"))
+        leaf = row.get("leaf") or row.get("pieza")
+        if component not in {"visual", "tornilleria"}:
+            leaves_by_component[component].add(leaf)
+
+    all_context_layers = {
+        leaf: mesh for leaf, mesh in cache.items()
+        if include_in_locator_context(leaf)
+    }
+    global_bounds = mesh_bounds(all_context_layers.values())
+    if global_bounds is None:
+        raise ValueError("No hay contexto global para locators")
+    mins, maxs = global_bounds
+    spans = maxs - mins
+    margin = float(spans.max()) * 0.04
+    axes = (
+        (mins[0] - margin, maxs[0] + margin),
+        (mins[1] - margin, maxs[1] + margin),
+        (mins[2] - margin, maxs[2] + margin),
+    )
+
+    # Decision UNICA y consistente: que capas pesadas se descartan del contexto
+    # fantasma de TODOS los locators (se loguea una sola vez, no por componente).
+    context_kept_global, locator_context_omitidas = limit_layers(all_context_layers, MAX_LOCATOR_TRIANGLES)
+
+    manifest = []
+    for component in sorted(leaves_by_component, key=component_rank):
+        leaves = sorted(leaves_by_component[component])
+        layer_meshes = {leaf: cache[leaf] for leaf in leaves if leaf in cache}
+        label = component_label(component)
+        slug = slugify(component)
+
+        if not layer_meshes:
+            manifest.append({"component": component, "label": label, "estado": "no_mallable",
+                             "capas_componente": leaves, "tri_count": 0})
+            print(f"  [SKIP] componente {component}: no mallable")
             continue
 
-        # Envolvente real de la pieza (bbox max - min), no los spans con piso minimo.
-        pmins = [min(o["bbox"][i] for o in objs) for i in range(3)]
-        pmaxs = [max(o["bbox"][3 + i] for o in objs) for i in range(3)]
-        dims_mm = sorted(round(float(pmaxs[i] - pmins[i]), 1) for i in range(3))
+        # Subconjunto (solo): se limita por su propio presupuesto.
+        kept_solo, omitidas_solo = limit_layers(layer_meshes, MAX_COMPONENT_TRIANGLES)
+        solo = combine_meshes(kept_solo.values())
+        tri_solo = int(sum(len(f) for _, f in kept_solo.values()))
+        if solo is not None:
+            render_mesh(solo, COMPONENT_DIR / f"{slug}-solo.png", title=label, dims_mm=sorted_dims_from_mesh(solo))
 
-        all_v = []
-        all_f = []
-        offset = 0
-        for o in objs:
-            v, f = get_mesh_from_geometry(o["geom"])
-            if v is not None:
-                all_v.append(v)
-                all_f.append(f + offset)
-                offset += len(v)
+        # Locator: contexto = decision global menos las capas del componente; resaltado = componente.
+        context_layers = {leaf: mesh for leaf, mesh in context_kept_global.items() if leaf not in leaves}
+        context = combine_meshes(context_layers.values())
+        highlight = combine_meshes(layer_meshes.values())
+        groups = []
+        if context is not None:
+            groups.append(Group(context[0], context[1], GHOST, GHOST[3], False, False))
+        if highlight is not None:
+            groups.append(Group(highlight[0], highlight[1], RED, 1.0, True, True))
+        render_groups(
+            groups,
+            COMPONENT_DIR / f"{slug}-locator.png",
+            xlim=axes[0],
+            ylim=axes[1],
+            zlim=axes[2],
+            title=f"{label} - locator",
+        )
+        manifest.append({
+            "component": component,
+            "label": label,
+            "estado": "rendered",
+            "tri_count": tri_solo,                 # triangulos realmente renderizados en el solo
+            "capas_componente": leaves,            # todas las capas del componente
+            "capas_solo": sorted(kept_solo),       # las que entraron en la imagen del solo
+            "omitidas_solo": omitidas_solo,        # descartadas del solo por presupuesto
+            "solo": f"docs/img/componentes/{slug}-solo.png" if solo is not None else None,
+            "locator": f"docs/img/componentes/{slug}-locator.png",
+        })
+        print(f"  [OK] componente {component}: solo={tri_solo} tri")
+    return {"componentes": manifest, "locator_contexto_omitidas": locator_context_omitidas}
 
-        if not all_v:
-            manifest.append({
-                "slug": slug,
-                "pieza": leaf,
-                "estado": "skipped",
-                "triangulos": 0,
-                "dims_mm": dims_mm,
-                "motivo": "geometria no mallable (VER CAD)",
-            })
-            complete = False
-            print(f"  [SKIP] {slug}: geometria no mallable")
-            continue
 
-        verts = np.vstack(all_v)
-        faces = np.vstack(all_f)
-        out_path = os.path.join(OUT_DIR, f"{slug}.png")
-        try:
-            render_mesh(verts, faces, out_path, title=leaf, dims_mm=dims_mm)
-            manifest.append({
-                "slug": slug,
-                "pieza": leaf,
-                "estado": "rendered",
-                "triangulos": int(len(faces)),
-                "dims_mm": dims_mm,
-                "motivo": "renderizado desde mallas nativas de rhino3dm",
-            })
-            print(f"  [OK] {slug}: {len(faces)} triangulos")
-        except Exception as exc:
-            manifest.append({
-                "slug": slug,
-                "pieza": leaf,
-                "estado": "error",
-                "triangulos": 0,
-                "dims_mm": dims_mm,
-                "motivo": f"error matplotlib: {exc}",
-            })
-            complete = False
-            print(f"  [ERROR] {slug}: {exc}")
-
-    # Render del conjunto: allowlist explicita de piezas definitorias (sin muestreo aleatorio).
-    print("\nRenderizando conjunto (_conjunto.png)...")
-    CONJUNTO_ALLOW = {
-        "Perfil25-25",
-        "Chapa-Caja", "Chapa-Paredon", "Chapa-SoporteInferior", "ChapaCooler", "Chapa 1/8",
-        "MDF18mm", "MDF55", "FRENTE-PC",
-        "U 2219 - Door", "VentilacionDoor", "Tapas", "BisagraP",
-        "BandejasFijas", "HombroBandej", "GUIA-CREMA", "Cremayera", "PoleaDentada",
+def render_conjunto(cache):
+    allow_components = {"cajon", "contrafondo", "rotacion", "transmision", "bandejas", "puerta", "electrica"}
+    layer_meshes = {
+        leaf: mesh for leaf, mesh in cache.items()
+        if component_of(leaf) in allow_components and leaf not in VISUAL
+    }
+    kept, omitted = limit_layers(layer_meshes, MAX_LOCATOR_TRIANGLES)
+    conjunto = combine_meshes(kept.values())
+    if conjunto is None:
+        return {"estado": "error", "tri_count": 0, "omitidas": omitted, "motivo": "sin mallas"}
+    render_mesh(conjunto, PIECE_DIR / "_conjunto.png", title="LibreIncu-150 - conjunto", dims_mm=sorted_dims_from_mesh(conjunto))
+    return {
+        "estado": "rendered",
+        "tri_count": int(len(conjunto[1])),
+        "capas": sorted(kept),
+        "omitidas": omitted,
+        "path": "docs/img/piezas/_conjunto.png",
     }
 
-    def _motivo_omision(leaf):
-        n = leaf.lower()
-        if "acople" in n:
-            return "acople repetido (no estructural)"
-        if leaf == "BASE":
-            return "grupo BASE (objetos sueltos, no estructural)"
-        if "huevera" in n:
-            return "instancia de bloque (sin malla)"
-        if any(k in n for k in ("buje", "barra", "fondo", "antivib", "herraje",
-                                 "separador", "boquilla", "rodamiento")):
-            return "pieza secundaria/pequena"
-        return "secundaria (no definitoria del conjunto)"
 
-    # Registrar TODAS las piezas objetivo que NO entran en el conjunto.
-    conjunto_omitidos = [
-        {"capa": r["pieza"], "motivo": _motivo_omision(r["pieza"])}
-        for r in inventory if r["pieza"] not in CONJUNTO_ALLOW
-    ]
-
-    # Acumular por capa para poder recortar por capa entera si hiciera falta.
-    capa_mesh = {}
-    for leaf in CONJUNTO_ALLOW:
-        objs = by_leaf.get(leaf, [])
-        if not objs:
-            continue
-        vs, fs, off = [], [], 0
-        for o in objs:
-            v, f = get_mesh_from_geometry(o["geom"])
-            if v is not None:
-                vs.append(v)
-                fs.append(f + off)
-                off += len(v)
-        if vs:
-            capa_mesh[leaf] = (np.vstack(vs), np.vstack(fs))
-
-    MAX_CONJUNTO_TRIANGLES = 400000
-    total_tri = sum(len(f) for _, f in capa_mesh.values())
-    if total_tri > MAX_CONJUNTO_TRIANGLES:
-        for leaf in sorted(capa_mesh, key=lambda k: len(capa_mesh[k][1]), reverse=True):
-            if total_tri <= MAX_CONJUNTO_TRIANGLES:
-                break
-            total_tri -= len(capa_mesh[leaf][1])
-            conjunto_omitidos.append({"capa": leaf, "motivo": "descartada por tope de triangulos"})
-            del capa_mesh[leaf]
-
-    if capa_mesh:
-        all_v, all_f, offset = [], [], 0
-        for v, f in capa_mesh.values():
-            all_v.append(v)
-            all_f.append(f + offset)
-            offset += len(v)
-        verts = np.vstack(all_v)
-        faces = np.vstack(all_f)
-        cdims = sorted(round(float(verts.max(0)[i] - verts.min(0)[i]), 1) for i in range(3))
-        try:
-            render_mesh(verts, faces, os.path.join(OUT_DIR, "_conjunto.png"),
-                        title="LibreIncu-150 — conjunto (piezas definitorias)",
-                        dims_mm=cdims)
-            print(f"  [OK] conjunto: {len(faces)} triangulos, {len(capa_mesh)} capas")
-        except Exception as exc:
-            print(f"  [ERROR] conjunto: {exc}")
-            complete = False
-    else:
-        print("  [ERROR] conjunto: no se pudieron extraer mallas")
-        complete = False
-
-    # Manifiesto
-    manifest_data = {
+def write_manifest(inventory_data, objects, stats, pieces, components, locator_ctx_omit, conjunto, diag, only):
+    envelope = reconcile_envelope(objects)
+    piece_ok = only not in {"piece", "all"} or any(p["estado"] == "rendered" for p in pieces)
+    component_ok = only not in {"component", "all"} or any(c["estado"] == "rendered" for c in components)
+    conjunto_ok = only not in {"conjunto", "all"} or conjunto["estado"] == "rendered"
+    complete = piece_ok and component_ok and conjunto_ok
+    data = {
         "aceptacion_completa": complete,
-        "gmsh_diagnostico": diag,
-        "gmsh_centroid_match": match_info,
         "render_method": "rhino3dm_native_meshes",
-        "nota": (
-            "El mallado OCC completo del STEP falla con 'overlapping facets'; "
-            "las imagenes se generaron a partir de las mallas nativas de rhino3dm "
-            "(Extrusion.GetMesh / BrepFace.GetMesh), preservando la identidad por capa."
-        ),
-        "conjunto_omitidos": conjunto_omitidos,
-        "piezas": manifest,
+        "envelope_body": envelope["body"],
+        "envelope_total": envelope["total"],
+        "gmsh_diagnostico": diag,
+        "inventario_meta": inventory_data.get("meta", {}),
+        "mesh_cache": stats,
+        "piezas": pieces,
+        "componentes": components,
+        "locator_contexto_omitidas": locator_ctx_omit,
+        "conjunto": conjunto,
     }
-
-    with open(os.path.join(OUT_DIR, "manifiesto.json"), "w", encoding="utf-8") as f:
-        json.dump(manifest_data, f, indent=2, ensure_ascii=False)
-
-    with open(os.path.join(OUT_DIR, "manifiesto.md"), "w", encoding="utf-8") as f:
-        f.write("# Manifiesto de renders de piezas\n\n")
+    for out_dir in (PIECE_DIR, COMPONENT_DIR):
+        out_dir.mkdir(parents=True, exist_ok=True)
+    with (PIECE_DIR / "manifiesto.json").open("w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+    with (PIECE_DIR / "manifiesto.md").open("w", encoding="utf-8") as f:
+        f.write("# Manifiesto de renders\n\n")
         f.write(f"- **aceptacion_completa:** `{complete}`\n")
-        f.write(f"- **metodo:** {manifest_data['render_method']}\n")
-        f.write(f"- **gmsh:** {diag['note']}\n")
-        f.write(f"- **match centroides:** {match_info}\n\n")
-        f.write("| Pieza | Slug | Estado | Triangulos | Dim mm | Motivo |\n")
-        f.write("|---|---|---|---|---|---|\n")
-        for m in manifest:
-            d = m.get("dims_mm")
-            dim_s = "x".join(f"{v:.0f}" for v in d) if d else ""
-            f.write(f"| {m['pieza']} | {m['slug']} | {m['estado']} | {m['triangulos']} | {dim_s} | {m['motivo']} |\n")
-        f.write("\n## Omitidos del conjunto\n\n")
-        f.write("| Capa | Motivo |\n|---|---|\n")
-        for o in conjunto_omitidos:
-            f.write(f"| {o['capa']} | {o['motivo']} |\n")
+        f.write("- **metodo:** rhino3dm_native_meshes\n")
+        f.write(f"- **envolvente cuerpo:** {envelope['body']} mm\n")
+        f.write(f"- **envolvente total:** {envelope['total']} mm\n")
+        f.write(f"- **gmsh:** {diag.get('note')}\n\n")
+        f.write("## Componentes\n\n")
+        f.write("| Componente | Estado | Triangulos | Locator |\n|---|---|---:|---|\n")
+        for item in components:
+            f.write(f"| {item['label']} | {item['estado']} | {item['tri_count']} | {item.get('locator', '')} |\n")
+        f.write("\n## Piezas\n\n")
+        f.write("| Pieza | Estado | Triangulos | Dim mm |\n|---|---|---:|---|\n")
+        for item in pieces:
+            dims = "x".join(f"{v:.0f}" for v in item.get("dims_mm", []))
+            f.write(f"| {item['pieza']} | {item['estado']} | {item['tri_count']} | {dims} |\n")
+    return complete
 
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--only", choices=["piece", "component", "conjunto", "all"], default="all")
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    inventory_data, rows = load_inventory()
+    print(f"Leyendo CAD maestro: {MODEL_PATH}")
+    objects = load_rhino_objects()
+    print(f"  Objetos Rhino: {len(objects)}")
+    print("Mallando capas una sola vez...")
+    cache, stats = build_mesh_cache(objects)
+    print(f"  Capas mallables: {len(cache)} / {len(stats)}")
+    diag = gmsh_diagnostic()
+    print(f"Diagnostico gmsh: {diag.get('note')}")
+
+    pieces = []
+    components = []
+    locator_ctx_omit = []
+    conjunto = {"estado": "skipped", "tri_count": 0}
+    if args.only in {"piece", "all"}:
+        print("\nRenderizando piezas...")
+        pieces = render_pieces(cache, stats, rows, objects)
+    if args.only in {"component", "all"}:
+        print("\nRenderizando componentes y locators...")
+        comp_result = render_components(cache, rows)
+        components = comp_result["componentes"]
+        locator_ctx_omit = comp_result["locator_contexto_omitidas"]
+    if args.only in {"conjunto", "all"}:
+        print("\nRenderizando conjunto...")
+        conjunto = render_conjunto(cache)
+        print(f"  [{conjunto['estado'].upper()}] conjunto: {conjunto['tri_count']} triangulos")
+
+    complete = write_manifest(inventory_data, objects, stats, pieces, components,
+                              locator_ctx_omit, conjunto, diag, args.only)
     print(f"\nManifiesto guardado. aceptacion_completa={complete}")
     return 0 if complete else 1
 

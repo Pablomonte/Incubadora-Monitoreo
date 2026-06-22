@@ -1,435 +1,1066 @@
 {
   "aceptacion_completa": true,
+  "render_method": "rhino3dm_native_meshes",
+  "envelope_body": [
+    604.8,
+    1233.5,
+    1170.4
+  ],
+  "envelope_total": [
+    604.8,
+    1263.9,
+    1189.2
+  ],
   "gmsh_diagnostico": {
     "ok": true,
     "source": "stp",
     "entities_3d": 1225,
     "entities_2d": 13942,
     "bbox_mm": [
-      608.7032651652695,
-      1213.0200270087153,
-      1063.85285237446
+      608.7,
+      1213.0,
+      1063.9
     ],
-    "centroid_match": null,
-    "note": "Envolvente OK: 608.7 x 1213.0 x 1063.9 mm"
+    "note": "Diagnostico gmsh OK desde stp"
   },
-  "gmsh_centroid_match": {
-    "matched": 10968,
-    "ambiguous": 4199,
-    "total_entities": 15167
+  "inventario_meta": {
+    "modelo": "Incubadora-Final.3dm",
+    "units": "mm",
+    "envelope_body": [
+      604.8,
+      1233.5,
+      1170.4
+    ],
+    "envelope_total": [
+      604.8,
+      1263.9,
+      1189.2
+    ],
+    "envelope_notes": {
+      "body": "Sin puerta abierta, VentilacionDoor ni FRENTE-PC",
+      "total": "AABB completo del CAD"
+    },
+    "caveat_numeracion": "Numeracion propia y reproducible; no corresponde necesariamente al PDF original.",
+    "caveat_medidas": "Dimensiones = bounding box / envolvente. Para agujeros, plegados y angulos abrir el CAD.",
+    "warnings": []
   },
-  "render_method": "rhino3dm_native_meshes",
-  "nota": "El mallado OCC completo del STEP falla con 'overlapping facets'; las imagenes se generaron a partir de las mallas nativas de rhino3dm (Extrusion.GetMesh / BrepFace.GetMesh), preservando la identidad por capa.",
-  "conjunto_omitidos": [
-    {
-      "capa": "huevera",
-      "motivo": "instancia de bloque (sin malla)"
+  "mesh_cache": {
+    "ACOPLE 8 a 5": {
+      "object_count": 17,
+      "geometry_types": {
+        "Brep": 17
+      },
+      "tri_count": 295376,
+      "status": "renderable"
     },
-    {
-      "capa": "AcopleBandejaEje",
-      "motivo": "acople repetido (no estructural)"
+    "AcopleBandejaEje": {
+      "object_count": 75,
+      "geometry_types": {
+        "Brep": 75
+      },
+      "tri_count": 118914,
+      "status": "renderable"
     },
-    {
-      "capa": "ACOPLE 8 a 5",
-      "motivo": "acople repetido (no estructural)"
+    "AcoplesPA6": {
+      "object_count": 3,
+      "geometry_types": {
+        "Brep": 3
+      },
+      "tri_count": 6794,
+      "status": "renderable"
     },
-    {
-      "capa": "AcoplesPA6",
-      "motivo": "acople repetido (no estructural)"
+    "Auxiliar1": {
+      "object_count": 32,
+      "geometry_types": {
+        "Brep": 15,
+        "Extrusion": 17
+      },
+      "tri_count": 44228,
+      "status": "renderable"
     },
-    {
-      "capa": "Barra Avance Z",
-      "motivo": "pieza secundaria/pequena"
+    "Auxiliar2": {
+      "object_count": 1,
+      "geometry_types": {
+        "Brep": 1
+      },
+      "tri_count": 1256,
+      "status": "renderable"
     },
-    {
-      "capa": "Buje-PTFE",
-      "motivo": "pieza secundaria/pequena"
+    "Auxiliar3": {
+      "object_count": 1,
+      "geometry_types": {
+        "Brep": 1
+      },
+      "tri_count": 1884,
+      "status": "renderable"
     },
-    {
-      "capa": "FondoBrazo",
-      "motivo": "pieza secundaria/pequena"
+    "BASE": {
+      "object_count": 60,
+      "geometry_types": {
+        "Brep": 60
+      },
+      "tri_count": 197582,
+      "status": "renderable"
     },
-    {
-      "capa": "SoporT-AntiVib",
-      "motivo": "pieza secundaria/pequena"
+    "BandejasFijas": {
+      "object_count": 15,
+      "geometry_types": {
+        "Brep": 15
+      },
+      "tri_count": 15998,
+      "status": "renderable"
     },
-    {
-      "capa": "BASE",
-      "motivo": "grupo BASE (objetos sueltos, no estructural)"
+    "Barra Avance Z": {
+      "object_count": 2,
+      "geometry_types": {
+        "Brep": 2
+      },
+      "tri_count": 552494,
+      "status": "renderable"
     },
-    {
-      "capa": "BoquillaAltaP",
-      "motivo": "pieza secundaria/pequena"
+    "BisagraP": {
+      "object_count": 4,
+      "geometry_types": {
+        "Brep": 4
+      },
+      "tri_count": 2496,
+      "status": "renderable"
     },
-    {
-      "capa": "HerrajesTraseros",
-      "motivo": "pieza secundaria/pequena"
+    "BombaStuff": {
+      "object_count": 10,
+      "geometry_types": {
+        "Brep": 10
+      },
+      "tri_count": 61458,
+      "status": "renderable"
     },
-    {
-      "capa": "SeparadorPAI",
-      "motivo": "pieza secundaria/pequena"
+    "BoquillaAltaP": {
+      "object_count": 5,
+      "geometry_types": {
+        "Brep": 5
+      },
+      "tri_count": 13292,
+      "status": "renderable"
+    },
+    "Buje-PTFE": {
+      "object_count": 2,
+      "geometry_types": {
+        "Extrusion": 2
+      },
+      "tri_count": 1036,
+      "status": "renderable"
+    },
+    "Chapa 1/8": {
+      "object_count": 8,
+      "geometry_types": {
+        "Brep": 6,
+        "Extrusion": 2
+      },
+      "tri_count": 18380,
+      "status": "renderable"
+    },
+    "Chapa-Caja": {
+      "object_count": 1,
+      "geometry_types": {
+        "Brep": 1
+      },
+      "tri_count": 3980,
+      "status": "renderable"
+    },
+    "Chapa-Paredon": {
+      "object_count": 2,
+      "geometry_types": {
+        "Brep": 2
+      },
+      "tri_count": 8080,
+      "status": "renderable"
+    },
+    "Chapa-SoporteInferior": {
+      "object_count": 4,
+      "geometry_types": {
+        "Brep": 4
+      },
+      "tri_count": 1566,
+      "status": "renderable"
+    },
+    "ChapaCooler": {
+      "object_count": 3,
+      "geometry_types": {
+        "Brep": 3
+      },
+      "tri_count": 5247,
+      "status": "renderable"
+    },
+    "Cooler": {
+      "object_count": 1,
+      "geometry_types": {
+        "Brep": 1
+      },
+      "tri_count": 4664,
+      "status": "renderable"
+    },
+    "Cremayera": {
+      "object_count": 4,
+      "geometry_types": {
+        "Brep": 4
+      },
+      "tri_count": 23672,
+      "status": "renderable"
+    },
+    "FRENTE-PC": {
+      "object_count": 2,
+      "geometry_types": {
+        "Brep": 2
+      },
+      "tri_count": 4744,
+      "status": "renderable"
+    },
+    "FondoBrazo": {
+      "object_count": 2,
+      "geometry_types": {
+        "Extrusion": 2
+      },
+      "tri_count": 9760,
+      "status": "renderable"
+    },
+    "GUIA-CREMA": {
+      "object_count": 3,
+      "geometry_types": {
+        "Brep": 3
+      },
+      "tri_count": 4194,
+      "status": "renderable"
+    },
+    "HerrajesTraseros": {
+      "object_count": 3,
+      "geometry_types": {
+        "Brep": 3
+      },
+      "tri_count": 7668,
+      "status": "renderable"
+    },
+    "HombroBandej": {
+      "object_count": 6,
+      "geometry_types": {
+        "Brep": 6
+      },
+      "tri_count": 58332,
+      "status": "renderable"
+    },
+    "Letritas": {
+      "object_count": 10,
+      "geometry_types": {
+        "Extrusion": 10
+      },
+      "tri_count": 3884,
+      "status": "renderable"
+    },
+    "MDF18mm": {
+      "object_count": 4,
+      "geometry_types": {
+        "Brep": 3,
+        "Extrusion": 1
+      },
+      "tri_count": 7176,
+      "status": "renderable"
+    },
+    "MDF55": {
+      "object_count": 2,
+      "geometry_types": {
+        "Brep": 1,
+        "Extrusion": 1
+      },
+      "tri_count": 1436,
+      "status": "renderable"
+    },
+    "Pelos": {
+      "object_count": 780,
+      "geometry_types": {
+        "Extrusion": 780
+      },
+      "tri_count": 218400,
+      "status": "renderable"
+    },
+    "Perfil25-25": {
+      "object_count": 20,
+      "geometry_types": {
+        "Brep": 11,
+        "Extrusion": 9
+      },
+      "tri_count": 13259,
+      "status": "renderable"
+    },
+    "PoleaDentada": {
+      "object_count": 1,
+      "geometry_types": {
+        "Brep": 1
+      },
+      "tri_count": 3928,
+      "status": "renderable"
+    },
+    "Reguetones": {
+      "object_count": 14,
+      "geometry_types": {
+        "Brep": 14
+      },
+      "tri_count": 16456,
+      "status": "renderable"
+    },
+    "Rodamiento624": {
+      "object_count": 3,
+      "geometry_types": {
+        "Brep": 3
+      },
+      "tri_count": 10536,
+      "status": "renderable"
+    },
+    "Rodamiento626": {
+      "object_count": 11,
+      "geometry_types": {
+        "Brep": 11
+      },
+      "tri_count": 115434,
+      "status": "renderable"
+    },
+    "RodamientoHLM8UU": {
+      "object_count": 1,
+      "geometry_types": {
+        "Brep": 1
+      },
+      "tri_count": 14592,
+      "status": "renderable"
+    },
+    "SeparadorPAI": {
+      "object_count": 1,
+      "geometry_types": {
+        "Extrusion": 1
+      },
+      "tri_count": 3376,
+      "status": "renderable"
+    },
+    "SoporT-AntiVib": {
+      "object_count": 1,
+      "geometry_types": {
+        "Brep": 1
+      },
+      "tri_count": 2968,
+      "status": "renderable"
+    },
+    "Tapas": {
+      "object_count": 4,
+      "geometry_types": {
+        "Brep": 2,
+        "Extrusion": 2
+      },
+      "tri_count": 2164,
+      "status": "renderable"
+    },
+    "Tornillo M3": {
+      "object_count": 27,
+      "geometry_types": {
+        "Brep": 27
+      },
+      "tri_count": 1167958,
+      "status": "renderable"
+    },
+    "Tornillo M4": {
+      "object_count": 18,
+      "geometry_types": {
+        "Brep": 18
+      },
+      "tri_count": 757321,
+      "status": "renderable"
+    },
+    "Tornillo M5": {
+      "object_count": 24,
+      "geometry_types": {
+        "Brep": 24
+      },
+      "tri_count": 1657070,
+      "status": "renderable"
+    },
+    "Tuercas M3": {
+      "object_count": 11,
+      "geometry_types": {
+        "Brep": 11
+      },
+      "tri_count": 76242,
+      "status": "renderable"
+    },
+    "Tuercas M4": {
+      "object_count": 5,
+      "geometry_types": {
+        "Brep": 5
+      },
+      "tri_count": 22765,
+      "status": "renderable"
+    },
+    "Tuercas M5": {
+      "object_count": 8,
+      "geometry_types": {
+        "Brep": 8
+      },
+      "tri_count": 82552,
+      "status": "renderable"
+    },
+    "Tuercas M8": {
+      "object_count": 2,
+      "geometry_types": {
+        "Brep": 2
+      },
+      "tri_count": 17632,
+      "status": "renderable"
+    },
+    "TuercasM6": {
+      "object_count": 82,
+      "geometry_types": {
+        "Brep": 82
+      },
+      "tri_count": 667956,
+      "status": "renderable"
+    },
+    "U 2219 - Door": {
+      "object_count": 4,
+      "geometry_types": {
+        "Brep": 4
+      },
+      "tri_count": 8172,
+      "status": "renderable"
+    },
+    "VentilacionDoor": {
+      "object_count": 2,
+      "geometry_types": {
+        "Brep": 2
+      },
+      "tri_count": 19720,
+      "status": "renderable"
+    },
+    "huevera": {
+      "object_count": 23,
+      "geometry_types": {
+        "Brep": 23
+      },
+      "tri_count": 1217,
+      "status": "renderable"
     }
-  ],
+  },
   "piezas": [
     {
       "slug": "perfil25-25",
       "pieza": "Perfil25-25",
       "estado": "rendered",
-      "triangulos": 13259,
+      "tri_count": 524,
+      "tri_count_capa": 13259,
       "dims_mm": [
-        576.9,
-        668.3,
-        1085.5
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "chapa-1-8",
-      "pieza": "Chapa 1/8",
-      "estado": "rendered",
-      "triangulos": 18380,
-      "dims_mm": [
-        125.2,
-        255.1,
-        297.6
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "chapa-soporteinferior",
-      "pieza": "Chapa-SoporteInferior",
-      "estado": "rendered",
-      "triangulos": 1566,
-      "dims_mm": [
-        24.0,
-        486.0,
-        504.0
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "mdf18mm",
-      "pieza": "MDF18mm",
-      "estado": "rendered",
-      "triangulos": 7176,
-      "dims_mm": [
-        601.4,
-        784.2,
-        1169.0
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "chapacooler",
-      "pieza": "ChapaCooler",
-      "estado": "rendered",
-      "triangulos": 5247,
-      "dims_mm": [
-        169.7,
-        232.0,
-        461.3
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "chapa-paredon",
-      "pieza": "Chapa-Paredon",
-      "estado": "rendered",
-      "triangulos": 8080,
-      "dims_mm": [
-        290.8,
-        359.0,
-        407.4
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "frente-pc",
-      "pieza": "FRENTE-PC",
-      "estado": "rendered",
-      "triangulos": 4744,
-      "dims_mm": [
-        19.7,
-        486.3,
-        1189.2
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "mdf55",
-      "pieza": "MDF55",
-      "estado": "rendered",
-      "triangulos": 1436,
-      "dims_mm": [
-        169.1,
-        497.2,
-        1021.1
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        25.0,
+        25.0,
+        1015.8
+      ]
     },
     {
       "slug": "chapa-caja",
       "pieza": "Chapa-Caja",
       "estado": "rendered",
-      "triangulos": 3980,
+      "tri_count": 3980,
+      "tri_count_capa": 3980,
       "dims_mm": [
-        85.2,
-        333.1,
-        458.6
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        72.4,
+        280.0,
+        385.0
+      ]
     },
     {
-      "slug": "tapas",
-      "pieza": "Tapas",
+      "slug": "mdf18mm",
+      "pieza": "MDF18mm",
       "estado": "rendered",
-      "triangulos": 2164,
+      "tri_count": 1364,
+      "tri_count_capa": 7176,
       "dims_mm": [
-        15.4,
-        465.2,
-        783.3
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        18.0,
+        653.5,
+        974.2
+      ]
     },
     {
-      "slug": "u-2219---door",
-      "pieza": "U 2219 - Door",
+      "slug": "mdf55",
+      "pieza": "MDF55",
       "estado": "rendered",
-      "triangulos": 8172,
+      "tri_count": 464,
+      "tri_count_capa": 1436,
       "dims_mm": [
-        26.4,
-        541.9,
-        1014.6
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        5.5,
+        497.2,
+        1021.1
+      ]
     },
     {
-      "slug": "bisagrap",
-      "pieza": "BisagraP",
+      "slug": "chapa-soporteinferior",
+      "pieza": "Chapa-SoporteInferior",
       "estado": "rendered",
-      "triangulos": 2496,
+      "tri_count": 12,
+      "tri_count_capa": 1566,
       "dims_mm": [
-        34.9,
-        34.9,
-        669.1
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        1.0,
+        160.0,
+        390.0
+      ]
     },
     {
-      "slug": "ventilaciondoor",
-      "pieza": "VentilacionDoor",
+      "slug": "chapa-paredon",
+      "pieza": "Chapa-Paredon",
       "estado": "rendered",
-      "triangulos": 19720,
+      "tri_count": 952,
+      "tri_count_capa": 8080,
       "dims_mm": [
-        22.2,
-        30.9,
-        422.2
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        176.4,
+        219.8,
+        237.0
+      ]
     },
     {
-      "slug": "huevera",
-      "pieza": "huevera",
+      "slug": "chapa-1-8",
+      "pieza": "Chapa 1/8",
       "estado": "rendered",
-      "triangulos": 1217,
+      "tri_count": 3236,
+      "tri_count_capa": 18380,
       "dims_mm": [
-        23.6,
-        360.9,
-        391.9
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "bandejasfijas",
-      "pieza": "BandejasFijas",
-      "estado": "rendered",
-      "triangulos": 15998,
-      "dims_mm": [
-        260.0,
-        480.0,
-        480.7
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "hombrobandej",
-      "pieza": "HombroBandej",
-      "estado": "rendered",
-      "triangulos": 58332,
-      "dims_mm": [
-        32.8,
-        329.2,
-        453.8
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "acoplebandejaeje",
-      "pieza": "AcopleBandejaEje",
-      "estado": "rendered",
-      "triangulos": 118914,
-      "dims_mm": [
-        18.8,
-        307.8,
-        530.4
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "acople-8-a-5",
-      "pieza": "ACOPLE 8 a 5",
-      "estado": "rendered",
-      "triangulos": 295376,
-      "dims_mm": [
-        426.5,
-        467.4,
-        486.0
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "cremayera",
-      "pieza": "Cremayera",
-      "estado": "rendered",
-      "triangulos": 23672,
-      "dims_mm": [
-        24.2,
-        64.6,
-        346.6
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "acoplespa6",
-      "pieza": "AcoplesPA6",
-      "estado": "rendered",
-      "triangulos": 6794,
-      "dims_mm": [
-        6.3,
-        26.8,
-        263.8
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "guia-crema",
-      "pieza": "GUIA-CREMA",
-      "estado": "rendered",
-      "triangulos": 4194,
-      "dims_mm": [
-        20.7,
-        62.7,
-        319.5
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "barra-avance-z",
-      "pieza": "Barra Avance Z",
-      "estado": "rendered",
-      "triangulos": 552494,
-      "dims_mm": [
-        8.2,
-        30.5,
-        132.2
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "buje-ptfe",
-      "pieza": "Buje-PTFE",
-      "estado": "rendered",
-      "triangulos": 1036,
-      "dims_mm": [
-        11.6,
-        15.8,
-        311.0
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        3.0,
+        21.9,
+        260.9
+      ]
     },
     {
       "slug": "fondobrazo",
       "pieza": "FondoBrazo",
       "estado": "rendered",
-      "triangulos": 9760,
+      "tri_count": 4880,
+      "tri_count_capa": 9760,
       "dims_mm": [
+        6.0,
         40.3,
-        329.4,
-        464.4
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        329.4
+      ]
     },
     {
-      "slug": "poleadentada",
-      "pieza": "PoleaDentada",
+      "slug": "buje-ptfe",
+      "pieza": "Buje-PTFE",
       "estado": "rendered",
-      "triangulos": 3928,
+      "tri_count": 12,
+      "tri_count_capa": 1036,
       "dims_mm": [
-        33.1,
-        50.2,
-        50.2
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        2.0,
+        3.7,
+        311.0
+      ]
+    },
+    {
+      "slug": "acople-8-a-5",
+      "pieza": "ACOPLE 8 a 5",
+      "estado": "rendered",
+      "tri_count": 3260,
+      "tri_count_capa": 295376,
+      "dims_mm": [
+        6.0,
+        15.0,
+        310.0
+      ]
     },
     {
       "slug": "soport-antivib",
       "pieza": "SoporT-AntiVib",
       "estado": "rendered",
-      "triangulos": 2968,
+      "tri_count": 2968,
+      "tri_count_capa": 2968,
       "dims_mm": [
-        28.6,
-        63.8,
-        72.6
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        23.8,
+        60.5,
+        60.7
+      ]
+    },
+    {
+      "slug": "acoplespa6",
+      "pieza": "AcoplesPA6",
+      "estado": "rendered",
+      "tri_count": 2146,
+      "tri_count_capa": 6794,
+      "dims_mm": [
+        5.8,
+        19.8,
+        27.8
+      ]
+    },
+    {
+      "slug": "guia-crema",
+      "pieza": "GUIA-CREMA",
+      "estado": "rendered",
+      "tri_count": 92,
+      "tri_count_capa": 4194,
+      "dims_mm": [
+        8.0,
+        8.0,
+        316.6
+      ]
+    },
+    {
+      "slug": "cremayera",
+      "pieza": "Cremayera",
+      "estado": "rendered",
+      "tri_count": 13142,
+      "tri_count_capa": 23672,
+      "dims_mm": [
+        21.4,
+        58.4,
+        189.6
+      ]
+    },
+    {
+      "slug": "poleadentada",
+      "pieza": "PoleaDentada",
+      "estado": "rendered",
+      "tri_count": 3928,
+      "tri_count_capa": 3928,
+      "dims_mm": [
+        27.6,
+        41.8,
+        41.8
+      ]
+    },
+    {
+      "slug": "barra-avance-z",
+      "pieza": "Barra Avance Z",
+      "estado": "rendered",
+      "tri_count": 276247,
+      "tri_count_capa": 552494,
+      "dims_mm": [
+        8.0,
+        8.0,
+        25.4
+      ]
+    },
+    {
+      "slug": "bandejasfijas",
+      "pieza": "BandejasFijas",
+      "estado": "rendered",
+      "tri_count": 1354,
+      "tri_count_capa": 15998,
+      "dims_mm": [
+        15.0,
+        15.0,
+        400.5
+      ]
+    },
+    {
+      "slug": "hombrobandej",
+      "pieza": "HombroBandej",
+      "estado": "rendered",
+      "tri_count": 9722,
+      "tri_count_capa": 58332,
+      "dims_mm": [
+        11.1,
+        27.3,
+        81.4
+      ]
+    },
+    {
+      "slug": "acoplebandejaeje",
+      "pieza": "AcopleBandejaEje",
+      "estado": "rendered",
+      "tri_count": 3886,
+      "tri_count_capa": 118914,
+      "dims_mm": [
+        12.0,
+        12.0,
+        44.7
+      ]
+    },
+    {
+      "slug": "huevera",
+      "pieza": "huevera",
+      "estado": "rendered",
+      "tri_count": 44,
+      "tri_count_capa": 1217,
+      "dims_mm": [
+        0.0,
+        0.1,
+        0.1
+      ]
+    },
+    {
+      "slug": "frente-pc",
+      "pieza": "FRENTE-PC",
+      "estado": "rendered",
+      "tri_count": 2372,
+      "tri_count_capa": 4744,
+      "dims_mm": [
+        4.0,
+        486.0,
+        991.0
+      ]
+    },
+    {
+      "slug": "u-2219---door",
+      "pieza": "U 2219 - Door",
+      "estado": "rendered",
+      "tri_count": 3928,
+      "tri_count_capa": 8172,
+      "dims_mm": [
+        19.0,
+        22.0,
+        1010.8
+      ]
+    },
+    {
+      "slug": "tapas",
+      "pieza": "Tapas",
+      "estado": "rendered",
+      "tri_count": 908,
+      "tri_count_capa": 2164,
+      "dims_mm": [
+        9.0,
+        230.9,
+        322.2
+      ]
+    },
+    {
+      "slug": "bisagrap",
+      "pieza": "BisagraP",
+      "estado": "rendered",
+      "tri_count": 624,
+      "tri_count_capa": 2496,
+      "dims_mm": [
+        7.0,
+        28.5,
+        63.0
+      ]
+    },
+    {
+      "slug": "ventilaciondoor",
+      "pieza": "VentilacionDoor",
+      "estado": "rendered",
+      "tri_count": 9860,
+      "tri_count_capa": 19720,
+      "dims_mm": [
+        21.6,
+        21.6,
+        25.7
+      ]
     },
     {
       "slug": "base",
       "pieza": "BASE",
       "estado": "rendered",
-      "triangulos": 197582,
+      "tri_count": 724,
+      "tri_count_capa": 197582,
       "dims_mm": [
-        588.0,
-        694.6,
-        1170.4
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
-    },
-    {
-      "slug": "boquillaaltap",
-      "pieza": "BoquillaAltaP",
-      "estado": "rendered",
-      "triangulos": 13292,
-      "dims_mm": [
-        28.7,
-        50.4,
-        58.6
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        6.5,
+        18.0,
+        975.3
+      ]
     },
     {
       "slug": "herrajestraseros",
       "pieza": "HerrajesTraseros",
       "estado": "rendered",
-      "triangulos": 7668,
+      "tri_count": 2556,
+      "tri_count_capa": 7668,
       "dims_mm": [
+        5.0,
         37.5,
-        380.9,
-        589.4
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+        135.0
+      ]
     },
     {
       "slug": "separadorpai",
       "pieza": "SeparadorPAI",
       "estado": "rendered",
-      "triangulos": 3376,
+      "tri_count": 3376,
+      "tri_count_capa": 3376,
       "dims_mm": [
         4.0,
         75.3,
         89.5
-      ],
-      "motivo": "renderizado desde mallas nativas de rhino3dm"
+      ]
+    },
+    {
+      "slug": "boquillaaltap",
+      "pieza": "BoquillaAltaP",
+      "estado": "rendered",
+      "tri_count": 828,
+      "tri_count_capa": 13292,
+      "dims_mm": [
+        15.0,
+        17.0,
+        42.0
+      ]
     }
-  ]
+  ],
+  "componentes": [
+    {
+      "component": "cajon",
+      "label": "Cajon y estructura",
+      "estado": "rendered",
+      "tri_count": 17239,
+      "capas_componente": [
+        "Chapa-Caja",
+        "Perfil25-25"
+      ],
+      "capas_solo": [
+        "Chapa-Caja",
+        "Perfil25-25"
+      ],
+      "omitidas_solo": [],
+      "solo": "docs/img/componentes/cajon-solo.png",
+      "locator": "docs/img/componentes/cajon-locator.png"
+    },
+    {
+      "component": "contrafondo",
+      "label": "Contrafondo y cerramientos",
+      "estado": "rendered",
+      "tri_count": 36638,
+      "capas_componente": [
+        "Chapa 1/8",
+        "Chapa-Paredon",
+        "Chapa-SoporteInferior",
+        "MDF18mm",
+        "MDF55"
+      ],
+      "capas_solo": [
+        "Chapa 1/8",
+        "Chapa-Paredon",
+        "Chapa-SoporteInferior",
+        "MDF18mm",
+        "MDF55"
+      ],
+      "omitidas_solo": [],
+      "solo": "docs/img/componentes/contrafondo-solo.png",
+      "locator": "docs/img/componentes/contrafondo-locator.png"
+    },
+    {
+      "component": "rotacion",
+      "label": "Mecanismo de giro (ejes, acoples, rodamientos)",
+      "estado": "rendered",
+      "tri_count": 161120,
+      "capas_componente": [
+        "ACOPLE 8 a 5",
+        "AcoplesPA6",
+        "Buje-PTFE",
+        "FondoBrazo",
+        "Rodamiento624",
+        "Rodamiento626",
+        "RodamientoHLM8UU",
+        "SoporT-AntiVib"
+      ],
+      "capas_solo": [
+        "AcoplesPA6",
+        "Buje-PTFE",
+        "FondoBrazo",
+        "Rodamiento624",
+        "Rodamiento626",
+        "RodamientoHLM8UU",
+        "SoporT-AntiVib"
+      ],
+      "omitidas_solo": [
+        {
+          "capa": "ACOPLE 8 a 5",
+          "tri_count": 295376,
+          "motivo": "omitida por presupuesto"
+        }
+      ],
+      "solo": "docs/img/componentes/rotacion-solo.png",
+      "locator": "docs/img/componentes/rotacion-locator.png"
+    },
+    {
+      "component": "transmision",
+      "label": "Transmision y guiado",
+      "estado": "rendered",
+      "tri_count": 31794,
+      "capas_componente": [
+        "Barra Avance Z",
+        "Cremayera",
+        "GUIA-CREMA",
+        "PoleaDentada"
+      ],
+      "capas_solo": [
+        "Cremayera",
+        "GUIA-CREMA",
+        "PoleaDentada"
+      ],
+      "omitidas_solo": [
+        {
+          "capa": "Barra Avance Z",
+          "tri_count": 552494,
+          "motivo": "omitida por presupuesto"
+        }
+      ],
+      "solo": "docs/img/componentes/transmision-solo.png",
+      "locator": "docs/img/componentes/transmision-locator.png"
+    },
+    {
+      "component": "bandejas",
+      "label": "Bandejas y bastidor giratorio",
+      "estado": "rendered",
+      "tri_count": 194461,
+      "capas_componente": [
+        "AcopleBandejaEje",
+        "BandejasFijas",
+        "HombroBandej",
+        "huevera"
+      ],
+      "capas_solo": [
+        "AcopleBandejaEje",
+        "BandejasFijas",
+        "HombroBandej",
+        "huevera"
+      ],
+      "omitidas_solo": [],
+      "solo": "docs/img/componentes/bandejas-solo.png",
+      "locator": "docs/img/componentes/bandejas-locator.png"
+    },
+    {
+      "component": "puerta",
+      "label": "Puerta",
+      "estado": "rendered",
+      "tri_count": 37296,
+      "capas_componente": [
+        "BisagraP",
+        "FRENTE-PC",
+        "Tapas",
+        "U 2219 - Door",
+        "VentilacionDoor"
+      ],
+      "capas_solo": [
+        "BisagraP",
+        "FRENTE-PC",
+        "Tapas",
+        "U 2219 - Door",
+        "VentilacionDoor"
+      ],
+      "omitidas_solo": [],
+      "solo": "docs/img/componentes/puerta-solo.png",
+      "locator": "docs/img/componentes/puerta-locator.png"
+    },
+    {
+      "component": "electrica",
+      "label": "Actuadores y electrica",
+      "estado": "rendered",
+      "tri_count": 71369,
+      "capas_componente": [
+        "BombaStuff",
+        "ChapaCooler",
+        "Cooler"
+      ],
+      "capas_solo": [
+        "BombaStuff",
+        "ChapaCooler",
+        "Cooler"
+      ],
+      "omitidas_solo": [],
+      "solo": "docs/img/componentes/electrica-solo.png",
+      "locator": "docs/img/componentes/electrica-locator.png"
+    },
+    {
+      "component": "otros",
+      "label": "Otros / VER CAD",
+      "estado": "rendered",
+      "tri_count": 221918,
+      "capas_componente": [
+        "BASE",
+        "BoquillaAltaP",
+        "HerrajesTraseros",
+        "SeparadorPAI"
+      ],
+      "capas_solo": [
+        "BASE",
+        "BoquillaAltaP",
+        "HerrajesTraseros",
+        "SeparadorPAI"
+      ],
+      "omitidas_solo": [],
+      "solo": "docs/img/componentes/otros-solo.png",
+      "locator": "docs/img/componentes/otros-locator.png"
+    }
+  ],
+  "locator_contexto_omitidas": [
+    {
+      "capa": "Barra Avance Z",
+      "tri_count": 552494,
+      "motivo": "omitida por presupuesto"
+    },
+    {
+      "capa": "ACOPLE 8 a 5",
+      "tri_count": 295376,
+      "motivo": "omitida por presupuesto"
+    },
+    {
+      "capa": "BASE",
+      "tri_count": 197582,
+      "motivo": "omitida por presupuesto"
+    },
+    {
+      "capa": "AcopleBandejaEje",
+      "tri_count": 118914,
+      "motivo": "omitida por presupuesto"
+    },
+    {
+      "capa": "Rodamiento626",
+      "tri_count": 115434,
+      "motivo": "omitida por presupuesto"
+    }
+  ],
+  "conjunto": {
+    "estado": "rendered",
+    "tri_count": 315569,
+    "capas": [
+      "AcoplesPA6",
+      "BandejasFijas",
+      "BisagraP",
+      "BombaStuff",
+      "Buje-PTFE",
+      "Chapa 1/8",
+      "Chapa-Caja",
+      "Chapa-Paredon",
+      "Chapa-SoporteInferior",
+      "ChapaCooler",
+      "Cooler",
+      "Cremayera",
+      "FRENTE-PC",
+      "FondoBrazo",
+      "GUIA-CREMA",
+      "HombroBandej",
+      "MDF18mm",
+      "MDF55",
+      "Perfil25-25",
+      "PoleaDentada",
+      "Rodamiento624",
+      "RodamientoHLM8UU",
+      "SoporT-AntiVib",
+      "Tapas",
+      "U 2219 - Door",
+      "VentilacionDoor",
+      "huevera"
+    ],
+    "omitidas": [
+      {
+        "capa": "Barra Avance Z",
+        "tri_count": 552494,
+        "motivo": "omitida por presupuesto"
+      },
+      {
+        "capa": "ACOPLE 8 a 5",
+        "tri_count": 295376,
+        "motivo": "omitida por presupuesto"
+      },
+      {
+        "capa": "AcopleBandejaEje",
+        "tri_count": 118914,
+        "motivo": "omitida por presupuesto"
+      },
+      {
+        "capa": "Rodamiento626",
+        "tri_count": 115434,
+        "motivo": "omitida por presupuesto"
+      }
+    ],
+    "path": "docs/img/piezas/_conjunto.png"
+  }
 }

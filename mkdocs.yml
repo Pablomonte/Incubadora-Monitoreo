@@ -2,6 +2,8 @@ site_name: LibreIncu-150
 site_description: Manual de montaje e inventario de la incubadora LibreIncu-150
 site_url: https://pablomonte.github.io/LibreIncu-150/
 docs_dir: docs
+exclude_docs: |
+  img/piezas/manifiesto.md
 
 theme:
   name: material
@@ -23,14 +25,22 @@ theme:
         name: Modo claro
   features:
     - navigation.top
+    - navigation.tabs
     - navigation.sections
+    - navigation.indexes
     - content.code.copy
     - search.suggest
 
 nav:
   - Inicio: index.md
-  - Manual de montaje: manual.md
+  - Antes de fabricar: antes-de-fabricar.md
+  - Compra y corte: compra-y-corte.md
+  - Montaje mecanico: montaje-mecanico.md
+  - Instalacion electrica: instalacion-electrica.md
+  - Puesta en marcha: puesta-en-marcha.md
+  - Troubleshooting: troubleshooting.md
   - Inventario CAD: inventario.md
+  - Anexos: anexos.md
 
 markdown_extensions:
   - admonition

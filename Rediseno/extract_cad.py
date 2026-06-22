@@ -1,305 +1,311 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Extractor de inventario mecanico desde el CAD maestro del rediseno LibreIncu.
+"""Extrae el inventario mecanico desde Incubadora-Final.3dm."""
 
-Fuente unica: Incubadora-Final.3dm (Rhino, unidades = mm).
+from __future__ import annotations
 
-Que hace:
-  - Agrupa los objetos por CAPA (la capa = la pieza real del diseno).
-  - Por cada objeto calcula el bounding box y lo ordena [menor, medio, mayor]
-    para distinguir seccion vs largo.
-  - Junta instancias identicas -> arma una LISTA DE CORTE / COMPRA real
-    (p. ej. "Perfil25-25: 25x25x934 (x1), 30x30x1085 (x2)...").
-  - Clasifica cada pieza por uso (estructura/cerramiento/puerta/bandeja/volteo/
-    fijacion/comercial/visual) y por nivel de fabricacion.
-  - Salidas: cad/inventario.json, cad/inventario.csv, cad/inventario.md.
-
-REGLA CLAVE (sin inventar cotas):
-  El bounding box NUNCA se reporta como cota exacta. La confianza es:
-    - "estandar"   : pieza comercial cuyo bbox coincide con catalogo (rodamientos, etc.)
-    - "envolvente" : medida apta para compra/corte, NO para agujeros/plegados/angulos
-    - "instancia"  : bloque/instancia sin geometria explotada -> abrir CAD
-  Toda geometria fina se resuelve abriendo el CAD (VER CAD en el manual).
-"""
-
-import json
-import csv
-import os
 import collections
+import csv
+import json
+import os
+from pathlib import Path
+
 import rhino3dm
 
-MODEL = "Incubadora-Final.3dm"
-NULL_GUID = "00000000-0000-0000-0000-000000000000"
+from cad_common import (
+    AMBIGUAS_VER_CAD,
+    MODEL_3DM,
+    UNITS,
+    bbox_to_bounds,
+    build_layer_index,
+    component_label,
+    component_of,
+    component_rank,
+    fabricacion_of,
+    material_of,
+    name_of,
+    reconcile_envelope,
+    size_sig,
+    sorted_dims_from_bbox,
+)
 
 
-# --------------------------------------------------------------------------- #
-# Capas
-# --------------------------------------------------------------------------- #
-def build_layer_index(model):
-    """Devuelve {layer_index: (ruta_completa, nombre_hoja)}."""
-    layers = list(model.Layers)
-    by_id = {str(l.Id): l for l in layers}
-    out = {}
-    for i, l in enumerate(layers):
-        parts = [l.Name]
-        pid = str(l.ParentLayerId)
-        seen = set()
-        while pid and pid != NULL_GUID and pid not in seen:
-            seen.add(pid)
-            p = by_id.get(pid)
-            if not p:
-                break
-            parts.insert(0, p.Name)
-            pid = str(p.ParentLayerId)
-        out[i] = ("::".join(parts), l.Name)
-    return out
+def geometry_type(geom) -> str:
+    return type(geom).__name__
 
 
-# --------------------------------------------------------------------------- #
-# Clasificacion por nombre de capa
-# --------------------------------------------------------------------------- #
-def categoria(leaf):
+def is_block_instance(geom, dims) -> bool:
+    if dims is None:
+        return True
+    return dims[0] < 1.0 and dims[1] < 1.0 and geometry_type(geom) != "Extrusion"
+
+
+def confidence_for(leaf: str, fabricacion: str, block_count: int, real_count: int) -> str:
     n = leaf.lower()
-    if "perfil" in n or "bastidor" in n:
-        return "estructura"
-    if "chapa" in n or "mdf" in n or "frente" in n:
-        return "cerramiento"
-    if "door" in n or "puerta" in n or "bisagra" in n or "tapa" in n:
-        return "puerta"
-    if ("polea" in n or "acople" in n or "buje" in n or "rodamiento" in n
-            or "correa" in n or "brazo" in n or "avance" in n or "antivib" in n
-            or "cremay" in n or "crema" in n):
-        return "volteo"
-    if "bandeja" in n or "huevera" in n or "guia" in n or "hombro" in n:
-        return "bandeja"
-    if "tornillo" in n or "tuerca" in n or "arandela" in n:
-        return "fijacion"
-    if "cooler" in n or "bomba" in n or "motor" in n or "ventil" in n:
-        return "comercial"
-    if "pelo" in n or "letrita" in n or "auxiliar" in n or "regueton" in n:
-        return "visual"
-    return "otro"
+    if block_count and real_count == 0:
+        return "instancia (VER CAD)"
+    if leaf in AMBIGUAS_VER_CAD:
+        return "envolvente (VER CAD)"
+    if "comprar" in fabricacion and any(k in n for k in ("rodamiento", "tornillo", "tuerca", "cooler", "bomba")):
+        return "estandar"
+    return "envolvente"
 
 
-def material(leaf):
-    n = leaf.lower()
-    if "perfil25" in n:
-        return "Tubo estructural 25x25 (la capa tambien incluye perfiles 30x30)"
-    if "chapa 1/8" in n:
-        return 'Chapa 1/8" (~3.2 mm)'
-    if n.startswith("chapa"):
-        return "Chapa metalica plegada"
-    if "mdf18" in n:
-        return "Tablero MDF 18 mm"
-    if "mdf55" in n:
-        return "Tablero MDF"
-    if "ptfe" in n or "buje" in n:
-        return "PTFE (mecanizado)"
-    if "pa6" in n or ("acople" in n and "8 a 5" not in n):
-        return "Nylon PA6 (mecanizado)"
-    if "rodamiento626" in n:
-        return "Rodamiento 626 - 6x19x6 mm (comercial)"
-    if "rodamiento624" in n:
-        return "Rodamiento 624 - 4x13x5 mm (comercial)"
-    if "hlm8uu" in n:
-        return "Rodamiento lineal LM8UU (comercial)"
-    if "rodamiento" in n:
-        return "Rodamiento (comercial)"
-    if "tornillo" in n or "tuerca" in n:
-        return "Fijacion comercial"
-    if "polea" in n:
-        return "Polea dentada"
-    if "cooler" in n:
-        return "Ventilador / cooler (comercial)"
-    if "bomba" in n:
-        return "Bomba (comercial)"
-    return ""
+def collect_objects(model):
+    layer_idx = build_layer_index(model)
+    objects = []
+    for obj in model.Objects:
+        geom = obj.Geometry
+        path, leaf = layer_idx.get(obj.Attributes.LayerIndex, ("?", "?"))
+        try:
+            bb = geom.GetBoundingBox()
+        except Exception:
+            bb = None
+        dims = sorted_dims_from_bbox(bb) if bb is not None else None
+        bounds = bbox_to_bounds(bb) if bb is not None else None
+        objects.append({
+            "leaf": leaf,
+            "path": path,
+            "component": component_of(leaf),
+            "dims": dims,
+            "size_sig": size_sig(dims),
+            "bounds": bounds,
+            "is_block_instance": is_block_instance(geom, dims),
+            "geometry_type": geometry_type(geom),
+        })
+    return objects
 
 
-def fabricacion(cat, leaf):
-    n = leaf.lower()
-    if cat == "fijacion" or cat == "comercial":
-        return "comprar"
-    if "rodamiento" in n:
-        return "comprar"
-    if "perfil" in n:
-        return "cortar"
-    if "chapa" in n:
-        return "cortar + plegar (VER CAD)"
-    if "mdf" in n or "frente" in n:
-        return "cortar tablero (VER CAD)"
-    if "ptfe" in n or "pa6" in n or "buje" in n or "acople" in n or "polea" in n:
-        return "mecanizar / imprimir (VER CAD)"
-    if cat == "visual":
-        return "no fabricable (referencia visual)"
+def build_inventory(objects):
+    grouped = collections.defaultdict(lambda: {
+        "cant": 0,
+        "block_count": 0,
+        "real_count": 0,
+        "paths": collections.Counter(),
+        "geometry_types": collections.Counter(),
+        "dims_samples": [],
+    })
+
+    layer_summary = collections.defaultdict(lambda: collections.Counter())
+    for obj in objects:
+        key = (obj["leaf"], obj["size_sig"])
+        rec = grouped[key]
+        rec["cant"] += 1
+        rec["paths"][obj["path"]] += 1
+        rec["geometry_types"][obj["geometry_type"]] += 1
+        if obj["is_block_instance"]:
+            rec["block_count"] += 1
+        else:
+            rec["real_count"] += 1
+        if obj["dims"] is not None:
+            rec["dims_samples"].append(obj["dims"])
+            layer_summary[obj["leaf"]][obj["size_sig"]] += 1
+        elif obj["is_block_instance"]:
+            layer_summary[obj["leaf"]]["BLOQUE"] += 1
+
+    rows = []
+    for (leaf, sig), rec in grouped.items():
+        component = component_of(leaf)
+        dims = rec["dims_samples"][0] if rec["dims_samples"] else None
+        fabricacion = fabricacion_of(component, leaf)
+        rows.append({
+            "n": None,
+            "component": component,
+            "component_label": component_label(component),
+            "nombre": name_of(leaf, sig),
+            "leaf": leaf,
+            "ruta_cad": rec["paths"].most_common(1)[0][0] if rec["paths"] else leaf,
+            "dims_mm": dims,
+            "medidas": sig if sig != "BLOQUE" else "VER CAD",
+            "cant": rec["cant"],
+            "material": material_of(leaf),
+            "fabricacion": fabricacion,
+            "confianza": confidence_for(leaf, fabricacion, rec["block_count"], rec["real_count"]),
+            "size_sig": sig,
+            "geometry_types": dict(sorted(rec["geometry_types"].items())),
+        })
+
+    rows.sort(key=lambda r: (
+        component_rank(r["component"]),
+        -max(r["dims_mm"] or [0]),
+        r["size_sig"],
+        r["leaf"].lower(),
+    ))
+    for i, row in enumerate(rows, start=1):
+        row["n"] = i
+    return rows, layer_summary
+
+
+def checks(rows):
+    warnings = []
+    by_leaf = collections.defaultdict(list)
+    for row in rows:
+        if row["dims_mm"]:
+            by_leaf[row["leaf"]].append(row["dims_mm"])
+
+    for dims in by_leaf.get("Perfil25-25", []):
+        if not any(23 <= v <= 31 or 38 <= v <= 42 for v in dims[:2]):
+            warnings.append(f"Perfil25-25 fuera de rango testigo: {dims}")
+    for dims in by_leaf.get("Chapa 1/8", []):
+        if not 2.8 <= dims[0] <= 3.9:
+            warnings.append(f"Chapa 1/8 espesor fuera de rango testigo: {dims}")
+    for leaf, expect in (("Rodamiento626", (5.0, 6.8, 18.0, 20.5)), ("Rodamiento624", (3.5, 5.8, 12.0, 14.5))):
+        lo_inner, hi_inner, lo_outer, hi_outer = expect
+        for dims in by_leaf.get(leaf, []):
+            if not (lo_inner <= dims[0] <= hi_inner and lo_outer <= dims[-1] <= hi_outer):
+                warnings.append(f"{leaf} fuera de rango testigo: {dims}")
+    return warnings
+
+
+def action_bucket(row):
+    fabricacion = row["fabricacion"].lower()
+    if "comprar" in fabricacion:
+        return "Comprar"
+    if "cortar" in fabricacion and "plegar" not in fabricacion and "tablero" not in fabricacion:
+        return "Cortar"
+    if "mecanizar" in fabricacion or "imprimir" in fabricacion:
+        return "Fabricar / imprimir"
+    if "referencia visual" in fabricacion:
+        return "Referencia visual"
     return "VER CAD"
 
 
-# --------------------------------------------------------------------------- #
-# Geometria
-# --------------------------------------------------------------------------- #
-def sorted_dims(geom):
-    """Bounding box -> [menor, medio, mayor] redondeado a 0.1 mm. None si degenerado."""
-    try:
-        bb = geom.GetBoundingBox()
-    except Exception:
-        return None
-    d = sorted([round(bb.Max.X - bb.Min.X, 1),
-                round(bb.Max.Y - bb.Min.Y, 1),
-                round(bb.Max.Z - bb.Min.Z, 1)])
-    if d[2] <= 0:
-        return None
-    return d
+def write_component_summary(cad_dir: Path, by_component):
+    order = ["Comprar", "Cortar", "Fabricar / imprimir", "VER CAD", "Referencia visual"]
+    component_dir = cad_dir / "componentes"
+    component_dir.mkdir(parents=True, exist_ok=True)
+
+    def write_component_block(f, component, include_heading=True):
+        if include_heading:
+            f.write(f"## {component['label']}\n\n")
+        buckets = collections.defaultdict(list)
+        for row in component["piezas"]:
+            buckets[action_bucket(row)].append(row)
+        for bucket in order:
+            items = buckets.get(bucket, [])
+            if not items:
+                continue
+            f.write(f"### {bucket}\n\n")
+            f.write("| N | Nombre funcional | Medidas mm | Cant | Capa CAD | Confianza |\n")
+            f.write("|---:|---|---|---:|---|---|\n")
+            for row in items:
+                f.write(
+                    f"| {row['n']} | {row['nombre']} | {row['medidas']} | {row['cant']} | "
+                    f"{row['leaf']} | {row['confianza']} |\n"
+                )
+            f.write("\n")
+
+    with (cad_dir / "resumen_componentes.md").open("w", encoding="utf-8") as f:
+        f.write("# Resumen por componente\n\n")
+        f.write(
+            "Mini-BOM generado desde `inventario.json`. El inventario CAD completo queda en la pagina "
+            "Inventario CAD; estas tablas son para comprar, preparar y montar sin cargar el flujo principal.\n\n"
+        )
+        for component in by_component.values():
+            write_component_block(f, component)
+            with (component_dir / f"{component['component']}.md").open("w", encoding="utf-8") as single:
+                write_component_block(single, component, include_heading=False)
 
 
-def is_block_instance(geom, dims):
-    """Heuristica: instancia de bloque sin explotar -> bbox degenerado (<1mm en 2 ejes)."""
-    if dims is None:
-        return True
-    return dims[0] < 1.0 and dims[1] < 1.0
-
-
-# --------------------------------------------------------------------------- #
-# Main
-# --------------------------------------------------------------------------- #
-def main():
-    here = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(here)
-    if not os.path.exists(MODEL):
-        raise SystemExit(f"No se encontro {MODEL} en {here}")
-
-    model = rhino3dm.File3dm.Read(MODEL)
-    layer_idx = build_layer_index(model)
-
-    # Acumuladores por pieza (capa hoja)
-    pieces = collections.OrderedDict()
-    overall_min = [1e18, 1e18, 1e18]
-    overall_max = [-1e18, -1e18, -1e18]
-
-    for obj in model.Objects:
-        attr = obj.Attributes
-        geom = obj.Geometry
-        path, leaf = layer_idx.get(attr.LayerIndex, ("?", "?"))
-
-        try:
-            bb = geom.GetBoundingBox()
-            for k, (mn, mx) in enumerate([(bb.Min.X, bb.Max.X),
-                                          (bb.Min.Y, bb.Max.Y),
-                                          (bb.Min.Z, bb.Max.Z)]):
-                overall_min[k] = min(overall_min[k], mn)
-                overall_max[k] = max(overall_max[k], mx)
-        except Exception:
-            pass
-
-        dims = sorted_dims(geom)
-        key = leaf
-        if key not in pieces:
-            pieces[key] = {
-                "pieza": leaf,
-                "ruta_cad": path,
-                "cantidad": 0,
-                "tamanos": collections.Counter(),   # signature -> count
-                "bloques": 0,
-                "categoria": categoria(leaf),
-                "material": material(leaf),
-            }
-        p = pieces[key]
-        p["cantidad"] += 1
-        if is_block_instance(geom, dims):
-            p["bloques"] += 1
-        else:
-            sig = "x".join(f"{v:.0f}" for v in dims)  # "25x25x934"
-            p["tamanos"][sig] += 1
-
-    overall = [round(overall_max[k] - overall_min[k], 1) for k in range(3)]
-
-    # Construir inventario final
-    inventory = []
-    for p in pieces.values():
-        cat = p["categoria"]
-        fab = fabricacion(cat, p["pieza"])
-        # confianza
-        if "comprar" in fab and ("rodamiento" in p["pieza"].lower()
-                                 or "tornillo" in p["pieza"].lower()
-                                 or "tuerca" in p["pieza"].lower()):
-            conf = "estandar"
-        elif p["bloques"] and not p["tamanos"]:
-            conf = "instancia (VER CAD)"
-        else:
-            conf = "envolvente"
-
-        # lista de tamanos legible, ordenada por largo desc
-        sizes = sorted(p["tamanos"].items(),
-                       key=lambda kv: float(kv[0].split("x")[-1]), reverse=True)
-        sizes_str = "; ".join(f"{sig} (x{n})" for sig, n in sizes)
-        if p["bloques"]:
-            extra = f"{p['bloques']} bloque(s) sin explotar"
-            sizes_str = (sizes_str + "; " + extra) if sizes_str else extra
-
-        inventory.append({
-            "pieza": p["pieza"],
-            "ruta_cad": p["ruta_cad"],
-            "cantidad": p["cantidad"],
-            "tamanos_mm": sizes_str,
-            "tamanos_detalle": dict(p["tamanos"]),
-            "categoria": cat,
-            "material": p["material"],
-            "fabricacion": fab,
-            "confianza": conf,
-        })
-
-    # Orden: por categoria (segun prioridad) y luego por cantidad desc
-    orden_cat = ["estructura", "cerramiento", "puerta", "bandeja", "volteo",
-                 "fijacion", "comercial", "otro", "visual"]
-    inventory.sort(key=lambda r: (orden_cat.index(r["categoria"])
-                                  if r["categoria"] in orden_cat else 99,
-                                  -r["cantidad"]))
-
-    os.makedirs("cad", exist_ok=True)
+def write_outputs(cad_dir: Path, rows, layer_summary, envelope, warnings):
+    by_component = collections.OrderedDict()
+    for row in rows:
+        by_component.setdefault(row["component"], {
+            "component": row["component"],
+            "label": row["component_label"],
+            "piezas": [],
+        })["piezas"].append(row)
 
     meta = {
-        "modelo": MODEL,
-        "unidades": "mm",
-        "envolvente_total_mm": overall,
-        "nota": ("Dimensiones = bounding box (envolvente). No son cotas de "
-                 "agujeros/plegados/angulos: para geometria fina abrir el CAD."),
+        "modelo": MODEL_3DM,
+        "units": UNITS,
+        "envelope_body": envelope["body"],
+        "envelope_total": envelope["total"],
+        "envelope_notes": {
+            "body": envelope["body_note"],
+            "total": envelope["total_note"],
+        },
+        "caveat_numeracion": "Numeracion propia y reproducible; no corresponde necesariamente al PDF original.",
+        "caveat_medidas": "Dimensiones = bounding box / envolvente. Para agujeros, plegados y angulos abrir el CAD.",
+        "warnings": warnings,
     }
 
-    with open("cad/inventario.json", "w", encoding="utf-8") as f:
-        json.dump({"meta": meta, "piezas": inventory}, f, indent=2, ensure_ascii=False)
+    data = {
+        "meta": meta,
+        "componentes": list(by_component.values()),
+        "maestro": rows,
+    }
+    cad_dir.mkdir(parents=True, exist_ok=True)
+    with (cad_dir / "inventario.json").open("w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
-    cols = ["Pieza", "Ruta CAD", "Cantidad", "Tamanos envolventes mm (sig x N)",
-            "Material/nota", "Categoria", "Fabricacion", "Confianza"]
-    with open("cad/inventario.csv", "w", encoding="utf-8", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(cols)
-        for r in inventory:
-            w.writerow([r["pieza"], r["ruta_cad"], r["cantidad"], r["tamanos_mm"],
-                        r["material"], r["categoria"], r["fabricacion"], r["confianza"]])
+    cols = ["N", "Componente", "Nombre", "Capa CAD", "Medidas mm", "Cantidad", "Material", "Fabricacion", "Confianza"]
+    with (cad_dir / "inventario.csv").open("w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(cols)
+        for row in rows:
+            writer.writerow([
+                row["n"],
+                row["component_label"],
+                row["nombre"],
+                row["leaf"],
+                row["medidas"],
+                row["cant"],
+                row["material"],
+                row["fabricacion"],
+                row["confianza"],
+            ])
 
-    with open("cad/inventario.md", "w", encoding="utf-8") as f:
-        f.write("# LibreIncu-150 — Inventario mecanico\n\n")
-        f.write(f"- **Envolvente total:** {overall[0]} x {overall[1]} x {overall[2]} mm "
-                "(ancho x prof x alto aprox.)\n")
-        f.write("- **Tamanos = envolvente.** No son cotas de "
-                "agujeros, plegados ni angulos: para geometria fina **abrir el CAD**.\n")
-        f.write("- Notacion de tamanos: `seccion_menor x seccion_media x largo (xN)`, "
-                "una entrada por cada medida distinta dentro de la pieza.\n\n")
-        last = None
-        for r in inventory:
-            if r["categoria"] != last:
-                last = r["categoria"]
-                f.write(f"\n## {last.capitalize()}\n\n")
-                f.write("| Pieza | Ruta CAD | Cant | Tamanos envolventes mm | "
-                        "Material / nota | Fabricacion | Confianza |\n")
-                f.write("|---|---|---|---|---|---|---|\n")
-            f.write(f"| {r['pieza']} | {r['ruta_cad']} | {r['cantidad']} | "
-                    f"{r['tamanos_mm']} | {r['material']} | {r['fabricacion']} | "
-                    f"{r['confianza']} |\n")
+    with (cad_dir / "inventario.md").open("w", encoding="utf-8") as f:
+        total = " x ".join(f"{v:.1f}" for v in meta["envelope_total"])
+        body = " x ".join(f"{v:.1f}" for v in meta["envelope_body"])
+        f.write("# LibreIncu-150 - Inventario mecanico\n\n")
+        f.write(f"- **Envolvente cuerpo:** {body} mm ({meta['envelope_notes']['body']}).\n")
+        f.write(f"- **Envolvente total:** {total} mm ({meta['envelope_notes']['total']}).\n")
+        f.write(f"- **Numeracion:** {meta['caveat_numeracion']}\n")
+        f.write(f"- **Medidas:** {meta['caveat_medidas']}\n\n")
+        if warnings:
+            f.write("## Advertencias\n\n")
+            for warning in warnings:
+                f.write(f"- {warning}\n")
+            f.write("\n")
+        for component in by_component.values():
+            f.write(f"## {component['label']}\n\n")
+            f.write("| N | Nombre | Capa CAD | Medidas mm | Cant | Fabricacion | Confianza |\n")
+            f.write("|---:|---|---|---|---:|---|---|\n")
+            for row in component["piezas"]:
+                f.write(
+                    f"| {row['n']} | {row['nombre']} | {row['leaf']} | {row['medidas']} | "
+                    f"{row['cant']} | {row['fabricacion']} | {row['confianza']} |\n"
+                )
+            f.write("\n")
+        f.write("## Resumen por capa\n\n")
+        f.write("| Capa CAD | Medidas mm | Cantidad |\n|---|---|---:|\n")
+        for leaf in sorted(layer_summary):
+            for sig, count in sorted(layer_summary[leaf].items()):
+                f.write(f"| {leaf} | {sig} | {count} |\n")
+    write_component_summary(cad_dir, by_component)
 
-    print(f"OK - {len(inventory)} piezas. Envolvente {overall} mm. "
-          "Salidas en cad/inventario.{json,csv,md}")
+
+def main():
+    here = Path(__file__).resolve().parent
+    model_path = here / MODEL_3DM
+    if not model_path.exists():
+        raise SystemExit(f"No se encontro {model_path}")
+    model = rhino3dm.File3dm.Read(str(model_path))
+    objects = collect_objects(model)
+    rows, layer_summary = build_inventory(objects)
+    envelope = reconcile_envelope(objects)
+    warnings = checks(rows)
+    write_outputs(here / "cad", rows, layer_summary, envelope, warnings)
+
+    for warning in warnings:
+        print(f"ADVERTENCIA: {warning}")
+    print(
+        f"OK - {len(rows)} tipos pieza. "
+        f"Envolvente cuerpo={envelope['body']} total={envelope['total']} mm. "
+        "Salidas en Rediseno/cad/inventario.{json,csv,md} y resumen_componentes.md"
+    )
 
 
 if __name__ == "__main__":
