@@ -5,7 +5,7 @@ usar el boton para alternar entre **armado** y **despiece**, y hacer clic en las
 ver cada una en 3D. Los numeros (`Nº`) coinciden con la tabla del [Inventario CAD](inventario.md).
 
 !!! info "Requisitos"
-    Esta pagina usa `<model-viewer>` cargado desde CDN. Necesita un navegador con WebGL e internet.
+    Esta pagina usa `<model-viewer>` embebido en el sitio. Necesita un navegador con WebGL.
     No aparece en el PDF. Los modelos se descargan bajo demanda; el poster PNG se muestra hasta entonces.
 
 !!! warning "Modelos 3D = solo visualizacion"
@@ -13,7 +13,7 @@ ver cada una en 3D. Los numeros (`Nº`) coinciden con la tabla del [Inventario C
     pierden detalle fino (agujeros, dientes, plegados). Las medidas y la geometria de taller estan en el
     [Inventario CAD](inventario.md) y en el CAD maestro.
 
-<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<script src="assets/model-viewer.min.js"></script>
 
 ## Conjunto
 
@@ -40,7 +40,10 @@ ver cada una en 3D. Los numeros (`Nº`) coinciden con la tabla del [Inventario C
     <button slot="hotspot-puerta" data-position="803.9216353371061 681.8146624351087 171.2765695904704" data-normal="0.0 1.0 0.0">Puerta</button>
     <button slot="hotspot-electrica" data-position="993.3398209865012 572.5378743549082 -322.17177692953413" data-normal="0.0 1.0 0.0">Actuadores y electrica</button>
     <div slot="poster" class="v3d-poster-hint">Toca o hace clic para cargar el modelo 3D</div>
-    <div class="v3d-fallback">Tu navegador no soporta WebGL o no puede cargar model-viewer.</div>
+    <div class="v3d-fallback">
+      <img src="img/piezas/_conjunto.png" alt="Conjunto LibreIncu-150">
+      <p>Cargando visor 3D... Si no aparece, comproba tu conexion o usa un navegador con WebGL.</p>
+    </div>
   </model-viewer>
 </div>
 
@@ -59,7 +62,10 @@ Selecciona una pieza para ver su modelo 3D. Los numeros son los mismos del [Inve
                 shadow-intensity="1"
                 exposure="0.8">
     <div slot="poster" class="v3d-poster-hint">Selecciona una pieza de la grilla</div>
-    <div class="v3d-fallback">Tu navegador no soporta WebGL o no puede cargar model-viewer.</div>
+    <div class="v3d-fallback">
+      <img src="img/piezas/_conjunto.png" alt="Selecciona una pieza">
+      <p>Cargando visor 3D... Si no aparece, comproba tu conexion o usa un navegador con WebGL.</p>
+    </div>
   </model-viewer>
   <div id="pieza-caption" class="v3d-caption">Ninguna pieza seleccionada</div>
 </div>
@@ -177,5 +183,19 @@ model-viewer {
   font-size: 0.8rem;
   text-align: center;
   line-height: 1.2;
+}
+model-viewer:defined .v3d-fallback {
+  display: none;
+}
+.v3d-fallback {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
+}
+.v3d-fallback img {
+  max-width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  background: #fafafa;
 }
 </style>
