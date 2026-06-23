@@ -13,7 +13,7 @@ ver cada una en 3D. Los numeros (`Nº`) coinciden con la tabla del [Inventario C
     pierden detalle fino (agujeros, dientes, plegados). Las medidas y la geometria de taller estan en el
     [Inventario CAD](inventario.md) y en el CAD maestro.
 
-<script src="assets/model-viewer.min.js"></script>
+<script src="../assets/model-viewer.min.js"></script>
 
 ## Conjunto
 
@@ -23,8 +23,8 @@ ver cada una en 3D. Los numeros (`Nº`) coinciden con la tabla del [Inventario C
     <button id="btn-despiece" class="v3d-tab" data-mode="despiece">Despiece</button>
   </div>
   <model-viewer id="visor-conjunto"
-                src="models/conjunto-armado.glb"
-                poster="img/piezas/_conjunto.png"
+                src="../models/conjunto-armado.glb"
+                poster="../img/piezas/_conjunto.png"
                 alt="Conjunto LibreIncu-150"
                 camera-controls
                 camera-orbit="-60deg 22deg 2.5m"
@@ -41,7 +41,7 @@ ver cada una en 3D. Los numeros (`Nº`) coinciden con la tabla del [Inventario C
     <button slot="hotspot-electrica" data-position="993.3398209865012 572.5378743549082 -322.17177692953413" data-normal="0.0 1.0 0.0">Actuadores y electrica</button>
     <div slot="poster" class="v3d-poster-hint">Toca o hace clic para cargar el modelo 3D</div>
     <div class="v3d-fallback">
-      <img src="img/piezas/_conjunto.png" alt="Conjunto LibreIncu-150">
+      <img src="../img/piezas/_conjunto.png" alt="Conjunto LibreIncu-150">
       <p>Cargando visor 3D... Si no aparece, comproba tu conexion o usa un navegador con WebGL.</p>
     </div>
   </model-viewer>
@@ -54,7 +54,7 @@ Selecciona una pieza para ver su modelo 3D. Los numeros son los mismos del [Inve
 <div class="vista3d-pieza">
   <model-viewer id="visor-pieza"
                 src=""
-                poster="img/piezas/_conjunto.png"
+                poster="../img/piezas/_conjunto.png"
                 alt="Pieza seleccionada"
                 camera-controls
                 camera-orbit="-60deg 22deg 1.2m"
@@ -63,7 +63,7 @@ Selecciona una pieza para ver su modelo 3D. Los numeros son los mismos del [Inve
                 exposure="0.8">
     <div slot="poster" class="v3d-poster-hint">Selecciona una pieza de la grilla</div>
     <div class="v3d-fallback">
-      <img src="img/piezas/_conjunto.png" alt="Selecciona una pieza">
+      <img src="../img/piezas/_conjunto.png" alt="Selecciona una pieza">
       <p>Cargando visor 3D... Si no aparece, comproba tu conexion o usa un navegador con WebGL.</p>
     </div>
   </model-viewer>
@@ -81,7 +81,7 @@ Selecciona una pieza para ver su modelo 3D. Los numeros son los mismos del [Inve
   const caption = document.getElementById('pieza-caption');
 
   function setConjunto(mode) {
-    const src = mode === 'armado' ? 'models/conjunto-armado.glb' : 'models/conjunto-despiece.glb';
+    const src = mode === 'armado' ? '../models/conjunto-armado.glb' : '../models/conjunto-despiece.glb';
     visorConjunto.src = src;
     btnArmado.classList.toggle('active', mode === 'armado');
     btnDespiece.classList.toggle('active', mode === 'despiece');
