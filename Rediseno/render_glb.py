@@ -357,19 +357,22 @@ def write_vista3d_piezas_md(pieces: list[dict]) -> Path:
         '<div class="vista3d-grid" id="vista3d-grid">\n',
     ]
     for p in sorted(pieces, key=lambda x: (component_rank(x["component"]), x["slug"])):
+        # El fragmento se incluye en /vista-3d/, asi que las rutas (relativas a docs/)
+        # necesitan ../ para resolver contra docs/models y docs/img.
+        poster_rel = f'../{p["poster"]}'
         if p.get("omitida"):
             # Sin GLB: thumbnail informativo que no abre visor.
             lines.append(
                 f'  <div class="v3d-thumb v3d-thumb-no3d" title="{p["caption"]}">\n'
-                f'    <img src="{p["poster"]}" alt="{p["caption"]}" loading="lazy">\n'
+                f'    <img src="{poster_rel}" alt="{p["caption"]}" loading="lazy">\n'
                 f'    <span>{p["caption"]}</span>\n'
                 f'  </div>\n'
             )
         else:
             lines.append(
-                f'  <button class="v3d-thumb" data-src="{p["path"]}" data-poster="{p["poster"]}" '
+                f'  <button class="v3d-thumb" data-src="../{p["path"]}" data-poster="{poster_rel}" '
                 f'data-caption="{p["caption"]}" aria-label="{p["caption"]}">\n'
-                f'    <img src="{p["poster"]}" alt="{p["caption"]}" loading="lazy">\n'
+                f'    <img src="{poster_rel}" alt="{p["caption"]}" loading="lazy">\n'
                 f'    <span>{p["caption"]}</span>\n'
                 f'  </button>\n'
             )
@@ -380,6 +383,13 @@ def write_vista3d_piezas_md(pieces: list[dict]) -> Path:
 
 
 def write_vista3d_md(pieces: list[dict], conjunto: dict) -> Path:
+    """DEPRECADA / NO USAR. docs/vista-3d.md es contenido AUTORADO a mano
+    (model-viewer vendorizado en docs/assets, reveal=auto, camara 68deg, sin
+    hotspots, rutas ../). El template de abajo quedo viejo y NO se llama desde
+    main(); se conserva solo como referencia. Llamarla pisaria la pagina buena."""
+    raise RuntimeError(
+        "write_vista3d_md esta deprecada: docs/vista-3d.md se edita a mano, no se genera."
+    )
     path = REPO / "docs" / "vista-3d.md"
     path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -605,7 +615,9 @@ def main():
     conjunto = export_conjuntos(cache, objects)
 
     write_vista3d_piezas_md(pieces)
-    write_vista3d_md(pieces, conjunto)
+    # docs/vista-3d.md es contenido AUTORADO a mano (no se regenera aca): model-viewer
+    # vendorizado en docs/assets, reveal=auto, camara 68deg, sin hotspots, rutas ../.
+    # write_vista3d_md quedo deprecada (su template es viejo) para no pisar la pagina buena.
     write_manifest_glb(pieces, conjunto)
 
     total_size = sum(p["size_bytes"] for p in pieces)
