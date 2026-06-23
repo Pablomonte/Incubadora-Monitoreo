@@ -260,9 +260,13 @@ def export_conjuntos(cache: dict, objects: list[dict]) -> dict:
 
     for leaf, (verts, faces) in kept.items():
         comp = component_of(leaf)
-        tm = make_trimesh(verts, faces, component_color(comp))
-        if tm is None:
+        # Malla intermedia SIN rotar: la conversion Z-up->Y-up (zup_to_yup) se aplica
+        # UNA sola vez al construir armado/despiece con make_trimesh. Aplicarla tambien
+        # aca duplicaba la rotacion (-180°) y dejaba el conjunto acostado de espaldas.
+        if verts is None or faces is None or len(faces) == 0:
             continue
+        tm = trimesh.Trimesh(vertices=np.asarray(verts, dtype=np.float32),
+                             faces=np.asarray(faces), process=False)
         comp_meshes[comp].append((leaf, tm))
 
     if not comp_meshes:
