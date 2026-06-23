@@ -29,7 +29,7 @@ ver cada una en 3D. Los numeros (`Nº`) coinciden con la tabla del [Inventario C
                 camera-controls
                 camera-orbit="-60deg 22deg 2.5m"
                 auto-rotate
-                reveal="interaction"
+                reveal="auto"
                 shadow-intensity="1"
                 exposure="0.8">
     <button slot="hotspot-cajon" data-position="1036.0455851859317 573.5805785563466 -213.636739024928" data-normal="0.0 1.0 0.0">Cajon y estructura</button>
@@ -58,7 +58,7 @@ Selecciona una pieza para ver su modelo 3D. Los numeros son los mismos del [Inve
                 alt="Pieza seleccionada"
                 camera-controls
                 camera-orbit="-60deg 22deg 1.2m"
-                reveal="interaction"
+                reveal="auto"
                 shadow-intensity="1"
                 exposure="0.8">
     <div slot="poster" class="v3d-poster-hint">Selecciona una pieza de la grilla</div>
