@@ -1,0 +1,481 @@
+{
+  "piezas": [
+    {
+      "slug": "perfil25-25",
+      "leaf": "Perfil25-25",
+      "component": "cajon",
+      "path": "models/piezas/perfil25-25.glb",
+      "poster": "img/piezas/perfil25-25.png",
+      "caption": "Nº 1-11 — Perfil estructural",
+      "n_range": "1-11",
+      "tri_count": 524,
+      "size_bytes": 11768
+    },
+    {
+      "slug": "chapa-caja",
+      "leaf": "Chapa-Caja",
+      "component": "cajon",
+      "path": "models/piezas/chapa-caja.glb",
+      "poster": "img/piezas/chapa-caja.png",
+      "caption": "Nº 7 — Chapa caja",
+      "n_range": "7",
+      "tri_count": 3980,
+      "size_bytes": 84352
+    },
+    {
+      "slug": "mdf18mm",
+      "leaf": "MDF18mm",
+      "component": "contrafondo",
+      "path": "models/piezas/mdf18mm.glb",
+      "poster": "img/piezas/mdf18mm.png",
+      "caption": "Nº 12-16 — Panel MDF 18 mm",
+      "n_range": "12-16",
+      "tri_count": 1364,
+      "size_bytes": 33316
+    },
+    {
+      "slug": "mdf55",
+      "leaf": "MDF55",
+      "component": "contrafondo",
+      "path": "models/piezas/mdf55.glb",
+      "poster": "img/piezas/mdf55.png",
+      "caption": "Nº 13-14 — Panel MDF",
+      "n_range": "13-14",
+      "tri_count": 464,
+      "size_bytes": 11932
+    },
+    {
+      "slug": "chapa-soporteinferior",
+      "leaf": "Chapa-SoporteInferior",
+      "component": "contrafondo",
+      "path": "models/piezas/chapa-soporteinferior.glb",
+      "poster": "img/piezas/chapa-soporteinferior.png",
+      "caption": "Nº 17-19 — Chapa soporte inferior",
+      "n_range": "17-19",
+      "tri_count": 12,
+      "size_bytes": 1200
+    },
+    {
+      "slug": "chapa-paredon",
+      "leaf": "Chapa-Paredon",
+      "component": "contrafondo",
+      "path": "models/piezas/chapa-paredon.glb",
+      "poster": "img/piezas/chapa-paredon.png",
+      "caption": "Nº 20-21 — Chapa paredon",
+      "n_range": "20-21",
+      "tri_count": 952,
+      "size_bytes": 22696
+    },
+    {
+      "slug": "chapa-1-8",
+      "leaf": "Chapa 1/8",
+      "component": "contrafondo",
+      "path": "models/piezas/chapa-1-8.glb",
+      "poster": "img/piezas/chapa-1-8.png",
+      "caption": "Nº 22-28 — Chapa 1/8 pulg.",
+      "n_range": "22-28",
+      "tri_count": 3236,
+      "size_bytes": 78368
+    },
+    {
+      "slug": "fondobrazo",
+      "leaf": "FondoBrazo",
+      "component": "rotacion",
+      "path": "models/piezas/fondobrazo.glb",
+      "poster": "img/piezas/fondobrazo.png",
+      "caption": "Nº 29 — Fondo de brazo",
+      "n_range": "29",
+      "tri_count": 4880,
+      "size_bytes": 117756
+    },
+    {
+      "slug": "buje-ptfe",
+      "leaf": "Buje-PTFE",
+      "component": "rotacion",
+      "path": "models/piezas/buje-ptfe.glb",
+      "poster": "img/piezas/buje-ptfe.png",
+      "caption": "Nº 30-41 — Buje PTFE",
+      "n_range": "30-41",
+      "tri_count": 12,
+      "size_bytes": 1196
+    },
+    {
+      "slug": "acople-8-a-5",
+      "leaf": "ACOPLE 8 a 5",
+      "component": "rotacion",
+      "path": "models/piezas/acople-8-a-5.glb",
+      "poster": "img/piezas/acople-8-a-5.png",
+      "caption": "Nº 31-42 — Acople 8 a 5",
+      "n_range": "31-42",
+      "tri_count": 3260,
+      "size_bytes": 73368
+    },
+    {
+      "slug": "soport-antivib",
+      "leaf": "SoporT-AntiVib",
+      "component": "rotacion",
+      "path": "models/piezas/soport-antivib.glb",
+      "poster": "img/piezas/soport-antivib.png",
+      "caption": "Nº 32 — Soporte antivibracion",
+      "n_range": "32",
+      "tri_count": 2968,
+      "size_bytes": 73380
+    },
+    {
+      "slug": "acoplespa6",
+      "leaf": "AcoplesPA6",
+      "component": "rotacion",
+      "path": "models/piezas/acoplespa6.glb",
+      "poster": "img/piezas/acoplespa6.png",
+      "caption": "Nº 34-35 — Acople PA6",
+      "n_range": "34-35",
+      "tri_count": 2146,
+      "size_bytes": 52272
+    },
+    {
+      "slug": "guia-crema",
+      "leaf": "GUIA-CREMA",
+      "component": "transmision",
+      "path": "models/piezas/guia-crema.glb",
+      "poster": "img/piezas/guia-crema.png",
+      "caption": "Nº 43-46 — Guia de cremallera",
+      "n_range": "43-46",
+      "tri_count": 92,
+      "size_bytes": 3044
+    },
+    {
+      "slug": "cremayera",
+      "leaf": "Cremayera",
+      "component": "transmision",
+      "path": "models/piezas/cremayera.glb",
+      "poster": "img/piezas/cremayera.png",
+      "caption": "Nº 44-49 — Cremallera dentada",
+      "n_range": "44-49",
+      "tri_count": 13142,
+      "size_bytes": 292712
+    },
+    {
+      "slug": "poleadentada",
+      "leaf": "PoleaDentada",
+      "component": "transmision",
+      "path": "models/piezas/poleadentada.glb",
+      "poster": "img/piezas/poleadentada.png",
+      "caption": "Nº 47 — Polea dentada",
+      "n_range": "47",
+      "tri_count": 3928,
+      "size_bytes": 98284
+    },
+    {
+      "slug": "barra-avance-z",
+      "leaf": "Barra Avance Z",
+      "component": "transmision",
+      "path": "models/piezas/barra-avance-z.glb",
+      "poster": "img/piezas/barra-avance-z.png",
+      "caption": "Nº 48 — Barra avance Z",
+      "n_range": "48",
+      "tri_count": 20000,
+      "size_bytes": 378920
+    },
+    {
+      "slug": "bandejasfijas",
+      "leaf": "BandejasFijas",
+      "component": "bandejas",
+      "path": "models/piezas/bandejasfijas.glb",
+      "poster": "img/piezas/bandejasfijas.png",
+      "caption": "Nº 50-52 — Bandeja fija",
+      "n_range": "50-52",
+      "tri_count": 1354,
+      "size_bytes": 29148
+    },
+    {
+      "slug": "hombrobandej",
+      "leaf": "HombroBandej",
+      "component": "bandejas",
+      "path": "models/piezas/hombrobandej.glb",
+      "poster": "img/piezas/hombrobandej.png",
+      "caption": "Nº 53 — Hombro de bandeja",
+      "n_range": "53",
+      "tri_count": 9722,
+      "size_bytes": 199540
+    },
+    {
+      "slug": "acoplebandejaeje",
+      "leaf": "AcopleBandejaEje",
+      "component": "bandejas",
+      "path": "models/piezas/acoplebandejaeje.glb",
+      "poster": "img/piezas/acoplebandejaeje.png",
+      "caption": "Nº 54-59 — Acople bandeja-eje",
+      "n_range": "54-59",
+      "tri_count": 3886,
+      "size_bytes": 79864
+    },
+    {
+      "slug": "huevera",
+      "leaf": "huevera",
+      "component": "bandejas",
+      "path": "models/piezas/huevera.glb",
+      "poster": "img/piezas/huevera.png",
+      "caption": "Nº 60 — Bandeja huevera",
+      "n_range": "60",
+      "tri_count": 44,
+      "size_bytes": 1588
+    },
+    {
+      "slug": "frente-pc",
+      "leaf": "FRENTE-PC",
+      "component": "puerta",
+      "path": "models/piezas/frente-pc.glb",
+      "poster": "img/piezas/frente-pc.png",
+      "caption": "Nº 61 — Frente policarbonato",
+      "n_range": "61",
+      "tri_count": 2372,
+      "size_bytes": 61400
+    },
+    {
+      "slug": "u-2219---door",
+      "leaf": "U 2219 - Door",
+      "component": "puerta",
+      "path": "models/piezas/u-2219---door.glb",
+      "poster": "img/piezas/u-2219---door.png",
+      "caption": "Nº 62-63 — Puerta U 2219",
+      "n_range": "62-63",
+      "tri_count": 3928,
+      "size_bytes": 94924
+    },
+    {
+      "slug": "tapas",
+      "leaf": "Tapas",
+      "component": "puerta",
+      "path": "models/piezas/tapas.glb",
+      "poster": "img/piezas/tapas.png",
+      "caption": "Nº 64-67 — Tapas",
+      "n_range": "64-67",
+      "tri_count": 908,
+      "size_bytes": 20028
+    },
+    {
+      "slug": "bisagrap",
+      "leaf": "BisagraP",
+      "component": "puerta",
+      "path": "models/piezas/bisagrap.glb",
+      "poster": "img/piezas/bisagrap.png",
+      "caption": "Nº 68 — Bisagra puerta",
+      "n_range": "68",
+      "tri_count": 624,
+      "size_bytes": 15968
+    },
+    {
+      "slug": "ventilaciondoor",
+      "leaf": "VentilacionDoor",
+      "component": "puerta",
+      "path": "models/piezas/ventilaciondoor.glb",
+      "poster": "img/piezas/ventilaciondoor.png",
+      "caption": "Nº 69 — Ventilacion de puerta",
+      "n_range": "69",
+      "tri_count": 9860,
+      "size_bytes": 191844
+    },
+    {
+      "slug": "base",
+      "leaf": "BASE",
+      "component": "otros",
+      "path": "models/piezas/base.glb",
+      "poster": "img/piezas/base.png",
+      "caption": "Nº 130-162 — BASE",
+      "n_range": "130-162",
+      "tri_count": 724,
+      "size_bytes": 16176
+    },
+    {
+      "slug": "herrajestraseros",
+      "leaf": "HerrajesTraseros",
+      "component": "otros",
+      "path": "models/piezas/herrajestraseros.glb",
+      "poster": "img/piezas/herrajestraseros.png",
+      "caption": "Nº 136-140 — Herrajes traseros",
+      "n_range": "136-140",
+      "tri_count": 2556,
+      "size_bytes": 51132
+    },
+    {
+      "slug": "separadorpai",
+      "leaf": "SeparadorPAI",
+      "component": "otros",
+      "path": "models/piezas/separadorpai.glb",
+      "poster": "img/piezas/separadorpai.png",
+      "caption": "Nº 144 — Separador PAI",
+      "n_range": "144",
+      "tri_count": 3376,
+      "size_bytes": 81756
+    },
+    {
+      "slug": "boquillaaltap",
+      "leaf": "BoquillaAltaP",
+      "component": "otros",
+      "path": "models/piezas/boquillaaltap.glb",
+      "poster": "img/piezas/boquillaaltap.png",
+      "caption": "Nº 148-158 — Boquilla alta",
+      "n_range": "148-158",
+      "tri_count": 828,
+      "size_bytes": 21180
+    }
+  ],
+  "conjunto": {
+    "armado": {
+      "path": "models/conjunto-armado.glb",
+      "size_bytes": 5239052,
+      "tri_count": 209620
+    },
+    "despiece": {
+      "path": "models/conjunto-despiece.glb",
+      "size_bytes": 5239052,
+      "tri_count": 209620
+    },
+    "capas_incluidas": [
+      "ACOPLE 8 a 5",
+      "AcopleBandejaEje",
+      "AcoplesPA6",
+      "BandejasFijas",
+      "Barra Avance Z",
+      "BisagraP",
+      "BombaStuff",
+      "Buje-PTFE",
+      "Chapa 1/8",
+      "Chapa-Caja",
+      "Chapa-Paredon",
+      "Chapa-SoporteInferior",
+      "ChapaCooler",
+      "Cooler",
+      "Cremayera",
+      "FRENTE-PC",
+      "FondoBrazo",
+      "GUIA-CREMA",
+      "HombroBandej",
+      "MDF18mm",
+      "MDF55",
+      "Perfil25-25",
+      "PoleaDentada",
+      "Rodamiento624",
+      "Rodamiento626",
+      "RodamientoHLM8UU",
+      "SoporT-AntiVib",
+      "Tapas",
+      "U 2219 - Door",
+      "VentilacionDoor",
+      "huevera"
+    ],
+    "capas_omitidas": [],
+    "hotspots": [
+      {
+        "component": "cajon",
+        "label": "Cajon y estructura",
+        "position": [
+          1036.0455851859317,
+          573.5805785563466,
+          -213.636739024928
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      {
+        "component": "contrafondo",
+        "label": "Contrafondo y cerramientos",
+        "position": [
+          999.2311372930535,
+          616.6499866863312,
+          -366.61094505836934
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      {
+        "component": "rotacion",
+        "label": "Mecanismo de giro (ejes, acoples, rodamientos)",
+        "position": [
+          969.2155849818809,
+          694.4141909870903,
+          -311.40755386204756
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      {
+        "component": "transmision",
+        "label": "Transmision y guiado",
+        "position": [
+          1000.4258113050034,
+          735.2830899136111,
+          -405.75391387767877
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      {
+        "component": "bandejas",
+        "label": "Bandejas y bastidor giratorio",
+        "position": [
+          1065.0036877691173,
+          654.4253364751215,
+          -219.839055861182
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      {
+        "component": "puerta",
+        "label": "Puerta",
+        "position": [
+          803.9216353371061,
+          681.8146624351087,
+          171.2765695904704
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      {
+        "component": "electrica",
+        "label": "Actuadores y electrica",
+        "position": [
+          993.3398209865012,
+          572.5378743549082,
+          -322.17177692953413
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ],
+    "global_centroid": [
+      975.869765169189,
+      661.6782091070261,
+      -244.77179844465792
+    ],
+    "global_diagonal": 1644.191561470591
+  },
+  "totales": {
+    "piezas_count": 29,
+    "conjunto_tri_count": 209620,
+    "armado_size_bytes": 5239052,
+    "despiece_size_bytes": 5239052
+  }
+}

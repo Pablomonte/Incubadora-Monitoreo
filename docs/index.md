@@ -8,6 +8,7 @@ Esta version documenta el rediseño mecanico LibreIncu-150: gabinete, bandejas, 
 
 [Descargar manual PDF](manual_libreincu_150.pdf){ .md-button .md-button--primary }
 [Ver inventario CAD](inventario.md){ .md-button }
+[Ver modelo 3D](vista-3d.md){ .md-button }
 
 ![Conjunto LibreIncu-150](img/piezas/_conjunto.png){ width=680 }
 

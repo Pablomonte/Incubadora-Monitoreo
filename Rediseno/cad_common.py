@@ -46,6 +46,33 @@ COMPONENT_LABELS = {
     "otros": "Otros / VER CAD",
 }
 
+# Paleta estable para visualizacion 3D (RGBA 0-1 y HEX).
+COMPONENT_COLORS = {
+    "cajon": (0.90, 0.30, 0.25, 1.0),          # rojo terracota
+    "contrafondo": (0.35, 0.55, 0.35, 1.0),    # verde bosque
+    "rotacion": (0.95, 0.70, 0.15, 1.0),       # amarillo mostaza
+    "transmision": (0.20, 0.50, 0.80, 1.0),    # azul acero
+    "bandejas": (0.95, 0.50, 0.20, 1.0),       # naranja
+    "puerta": (0.55, 0.25, 0.65, 1.0),         # violeta
+    "electrica": (0.20, 0.75, 0.75, 1.0),      # cyan
+    "tornilleria": (0.75, 0.35, 0.70, 1.0),    # magenta suave
+    "visual": (0.65, 0.65, 0.65, 1.0),         # gris
+    "otros": (0.50, 0.50, 0.50, 1.0),          # gris oscuro
+}
+
+COMPONENT_COLORS_HEX = {
+    k: "#" + "".join(f"{int(c*255):02x}" for c in v[:3])
+    for k, v in COMPONENT_COLORS.items()
+}
+
+
+def component_color(component: str) -> tuple[float, float, float, float]:
+    return COMPONENT_COLORS.get(component, (0.5, 0.5, 0.5, 1.0))
+
+
+def component_color_hex(component: str) -> str:
+    return COMPONENT_COLORS_HEX.get(component, "#808080")
+
 VISUAL = {"Pelos", "Auxiliar1", "Auxiliar2", "Auxiliar3", "Reguetones", "Letritas"}
 ACTUADORES_ELEC = {"Cooler", "BombaStuff"}
 PUERTA_ABIERTA = {"U 2219 - Door", "VentilacionDoor", "FRENTE-PC"}

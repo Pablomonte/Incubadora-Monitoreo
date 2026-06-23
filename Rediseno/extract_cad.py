@@ -274,8 +274,9 @@ def write_outputs(cad_dir: Path, rows, layer_summary, envelope, warnings):
             f.write("| N | Nombre | Capa CAD | Medidas mm | Cant | Fabricacion | Confianza |\n")
             f.write("|---:|---|---|---|---:|---|---|\n")
             for row in component["piezas"]:
+                anchor = f"<a id=\"pieza-{row['n']}\"></a>{row['n']}"
                 f.write(
-                    f"| {row['n']} | {row['nombre']} | {row['leaf']} | {row['medidas']} | "
+                    f"| {anchor} | {row['nombre']} | {row['leaf']} | {row['medidas']} | "
                     f"{row['cant']} | {row['fabricacion']} | {row['confianza']} |\n"
                 )
             f.write("\n")
