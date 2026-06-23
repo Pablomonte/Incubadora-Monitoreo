@@ -13,7 +13,7 @@ ver cada una en 3D. Los numeros (`Nº`) coinciden con la tabla del [Inventario C
     pierden detalle fino (agujeros, dientes, plegados). Las medidas y la geometria de taller estan en el
     [Inventario CAD](inventario.md) y en el CAD maestro.
 
-<script src="../assets/model-viewer.min.js"></script>
+<script type="module" src="../assets/model-viewer.min.js"></script>
 
 ## Conjunto
 
