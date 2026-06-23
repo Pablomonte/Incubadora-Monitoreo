@@ -27,7 +27,7 @@ ver cada una en 3D. Los numeros (`Nº`) coinciden con la tabla del [Inventario C
                 poster="../img/piezas/_conjunto.png"
                 alt="Conjunto LibreIncu-150"
                 camera-controls
-                camera-orbit="-60deg 22deg 2.5m"
+                camera-orbit="-60deg 22deg auto"
                 auto-rotate
                 reveal="auto"
                 shadow-intensity="1"
@@ -57,7 +57,7 @@ Selecciona una pieza para ver su modelo 3D. Los numeros son los mismos del [Inve
                 poster="../img/piezas/_conjunto.png"
                 alt="Pieza seleccionada"
                 camera-controls
-                camera-orbit="-60deg 22deg 1.2m"
+                camera-orbit="-60deg 22deg auto"
                 reveal="auto"
                 shadow-intensity="1"
                 exposure="0.8">
