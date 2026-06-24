@@ -3,7 +3,7 @@
 - **Envolvente cuerpo:** 604.8 x 1233.5 x 1170.4 mm (Sin puerta abierta, VentilacionDoor ni FRENTE-PC).
 - **Envolvente total:** 604.8 x 1263.9 x 1189.2 mm (AABB completo del CAD).
 - **Numeracion:** Numeracion propia y reproducible; no corresponde necesariamente al PDF original.
-- **Medidas:** Dimensiones = bounding box / envolvente. Para agujeros, plegados y angulos abrir el CAD.
+- **Medidas:** Dimensiones = medida exterior (envolvente). Para agujeros, plegados y angulos abrir el CAD.
 
 ## Cajon y estructura
 
@@ -43,7 +43,7 @@
 | <a id="pieza-27"></a>27 | Chapa 1/8 pulg. 4x43x83 | Chapa 1/8 | 4x43x83 | 2 | cortar + plegar (VER CAD) | envolvente |
 | <a id="pieza-28"></a>28 | Chapa 1/8 pulg. 3x58x77 | Chapa 1/8 | 3x58x77 | 1 | cortar + plegar (VER CAD) | envolvente |
 
-## Mecanismo de giro (ejes, acoples, rodamientos)
+## Mecanismo de rotación (ejes, acoples, rodamientos)
 
 | N | Nombre | Capa CAD | Medidas mm | Cant | Fabricacion | Confianza |
 |---:|---|---|---|---:|---|---|

@@ -8,7 +8,7 @@ Esta pagina resume que comprar, que cortar y que fabricar. El inventario complet
 |---|---|
 | Rodamientos | 626 x11, 624 x3, HLM8UU x1. |
 | Tornilleria | M3, M4, M5 y tuercas M3/M4/M5/M6/M8 segun Inventario CAD. |
-| Actuadores | Bomba 12 V, cooler, motorreductor 12 V para volteo. |
+| Actuadores | Bomba 12 V, cooler, motorreductor 12 V para rotación. |
 | Potencia | Fuente 12 V 5 A, LM2596, resistencia 200 W, ventilador/turbina 220 VAC. |
 | Control | Placa Olivia v0.2, ESP32-WROOM-32D, BME280, reeds de final de carrera. |
 | Seguridad electrica | Disyuntor, termomagneticas, gabinete IP65, riel DIN, prensacables, puesta a tierra. |
@@ -17,11 +17,11 @@ Esta pagina resume que comprar, que cortar y que fabricar. El inventario complet
 
 | Material | Preparacion |
 |---|---|
-| Tubo estructural | Cortar perfiles 25x25, 30x30 y 40x40 segun mini-BOM de cajon. |
-| Chapas | Cortar y plegar con CAD abierto. No usar solo bounding box. |
+| Perfil plegado en L | Cortar perfiles 25x25, 30x30 y 40x40 segun mini-BOM de cajon. |
+| Chapas | Cortar y plegar con CAD abierto. No usar solo la medida exterior. |
 | MDF | Cortar paneles; verificar espesor real y escuadra. |
 | Policarbonato | Cortar frente; proteger caras hasta el montaje final. |
-| Piezas impresas/mecanizadas | Preparar acoples, guias, bujes y piezas del giro con CAD abierto. |
+| Piezas impresas/mecanizadas | Preparar acoples, guias, bujes y piezas de rotación con CAD abierto. |
 
 ## Resumen generado por componente
 
@@ -40,7 +40,7 @@ Preparar cajas o bandejas fisicas con estas etiquetas:
 
 - Cajon y estructura.
 - Contrafondo y cerramientos.
-- Mecanismo de giro.
+- Mecanismo de rotación.
 - Transmision y guiado.
 - Bandejas y bastidor giratorio.
 - Puerta.

@@ -226,7 +226,7 @@ def write_outputs(cad_dir: Path, rows, layer_summary, envelope, warnings):
             "total": envelope["total_note"],
         },
         "caveat_numeracion": "Numeracion propia y reproducible; no corresponde necesariamente al PDF original.",
-        "caveat_medidas": "Dimensiones = bounding box / envolvente. Para agujeros, plegados y angulos abrir el CAD.",
+        "caveat_medidas": "Dimensiones = medida exterior (envolvente). Para agujeros, plegados y angulos abrir el CAD.",
         "warnings": warnings,
     }
 

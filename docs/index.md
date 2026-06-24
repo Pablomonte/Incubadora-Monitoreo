@@ -1,10 +1,10 @@
 # LibreIncu-150
 
-Manual de fabricacion, montaje y puesta en marcha del rediseno LibreIncu-150.
+Manual de fabricacion, montaje y puesta en marcha de la incubadora LibreIncu-150.
 
 LibreIncu es una incubadora de huevos pensada como tecnologia abierta para la Agricultura Familiar, Campesina e Indigena. El objetivo es que una comunidad, taller o fabrica local pueda construir, reparar y adaptar la maquina sin depender de una caja cerrada.
 
-Esta version documenta el rediseño mecanico LibreIncu-150: gabinete, bandejas, mecanismo de giro, actuadores, instalacion electrica, placa Olivia v0.2 y puesta en marcha.
+Esta version documenta la version mecanica de LibreIncu-150: gabinete, bandejas, mecanismo de rotación, actuadores, instalacion electrica, placa Olivia v0.2 y puesta en marcha.
 
 [Descargar manual PDF](manual_libreincu_150.pdf){ .md-button .md-button--primary }
 [Ver inventario CAD](inventario.md){ .md-button }
@@ -15,13 +15,14 @@ Esta version documenta el rediseño mecanico LibreIncu-150: gabinete, bandejas, 
 ## Que se puede hacer con este manual
 
 - Comprar piezas comerciales, perfiles, placas, chapas, actuadores y fijaciones.
-- Cortar y preparar piezas usando medidas de envolvente extraidas del CAD.
+- Cortar y preparar las piezas necesarias.
 - Montar los subconjuntos mecanicos principales con apoyo visual.
 - Cablear la instalacion electrica con controles de seguridad.
 - Poner en marcha la incubadora y diagnosticar fallas frecuentes.
 
-!!! warning "Que no reemplaza este manual"
-    Las medidas mecanicas provienen del bounding box de cada pieza. Sirven para compra, corte y control general. Agujeros, plegados, angulos, tolerancias, alojamientos y posiciones finas se resuelven abriendo el CAD maestro cuando el manual indica `VER CAD`.
+!!! warning "Advertencia"
+    Las medidas mecanicas sirven para compra, corte y control general. 
+    Agujeros, plegados, angulos, tolerancias, alojamientos y posiciones finas se resuelven abriendo el CAD maestro cuando el manual indica `VER CAD`.
 
 ## Como leer este manual
 
@@ -31,17 +32,17 @@ Esta version documenta el rediseño mecanico LibreIncu-150: gabinete, bandejas, 
 4. **Instalacion electrica**: potencia, placa Olivia, GPIO y seguridad de 220 VAC.
 5. **Puesta en marcha**: checklist de prueba sin huevos y validacion por etapas.
 6. **Troubleshooting**: diagnostico guiado por sintoma.
-7. **Inventario CAD**: referencia tecnica completa generada desde el modelo.
+7. **Inventario CAD**: referencia tecnica completa.
 
 ## De un vistazo
 
 | Sistema | Resumen |
 |---|---|
-| Estructura | Bastidor de tubos 25x25, 30x30 y una pieza 40x40 mm. |
+| Estructura | Bastidor de plegado L 25x25, 30x30 y una pieza 40x40 mm. |
 | Cerramiento | Chapas metalicas, MDF 18 mm y frente de policarbonato. |
 | Temperatura | Resistencia calefactora 200 W, ventilacion y lectura BME280. |
 | Humidificacion | Bomba 12 V y circuito de agua controlado por la placa. |
-| Rotacion | Mecanismo de giro con ejes, acoples, rodamientos, polea y cremallera. |
+| Rotacion | Mecanismo de rotación de bandejas con ejes, acoples, rodamientos, polea y cremallera. |
 | Control | Placa Olivia v0.2 con ESP32-WROOM-32D. |
 | Conectividad | WiFi para operacion local y monitoreo del sistema. |
 

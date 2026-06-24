@@ -22,11 +22,11 @@ No es un plano de mecanizado completo. Cuando una pieza requiere agujeros, plega
 | `OK MONTAR` | El subconjunto puede montarse siguiendo este manual y verificaciones simples. |
 | `VER CAD` | Hace falta abrir el modelo maestro para geometria fina. |
 | `estandar` | Pieza comercial reconocible por catalogo o medida normalizada. |
-| `envolvente` | Medida de bounding box apta para compra/corte general. |
+| `envolvente` | Medida exterior (envolvente) apta para compra/corte general. |
 | `instancia` | Bloque o instancia que debe verificarse en CAD. |
 
 !!! info "Fuente de las medidas"
-    El inventario se genera desde `Rediseno/Incubadora-Final.3dm`. Las tablas usan milimetros y nombres funcionales; la capa CAD aparece como referencia secundaria.
+    El inventario sale del CAD maestro `Rediseno/Incubadora-Final.3dm`. Las tablas usan milimetros y nombres funcionales; la capa CAD queda como referencia.
 
 ## Herramientas recomendadas
 
@@ -55,4 +55,4 @@ No es un plano de mecanizado completo. Cuando una pieza requiere agujeros, plega
     No perforar ni plegar solo con las dimensiones de inventario. Para posiciones de agujeros, plegados, alojamientos de rodamientos, ejes y cremallera, abrir el CAD.
 
 !!! warning "Alineacion mecanica"
-    El mecanismo de giro necesita ejes paralelos, acoples libres y bandejas sin roce. Una pieza ligeramente desalineada puede trabar el volteo.
+    El mecanismo de rotación necesita ejes paralelos, acoples libres y bandejas sin roce. Una pieza ligeramente desalineada puede trabar la rotación.

@@ -1,15 +1,15 @@
 N,Componente,Nombre,Capa CAD,Medidas mm,Cantidad,Material,Fabricacion,Confianza
-1,Cajon y estructura,Perfil estructural 30x30x1086,Perfil25-25,30x30x1086,4,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
-2,Cajon y estructura,Perfil estructural 25x25x934,Perfil25-25,25x25x934,1,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
-3,Cajon y estructura,Perfil estructural 25x25x654,Perfil25-25,25x25x654,4,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
-4,Cajon y estructura,Perfil estructural 25x25x609,Perfil25-25,25x25x609,1,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
-5,Cajon y estructura,Perfil estructural 30x30x577,Perfil25-25,30x30x577,4,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
-6,Cajon y estructura,Perfil estructural 40x40x461,Perfil25-25,40x40x461,1,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
+1,Cajon y estructura,Perfil estructural 30x30x1086,Perfil25-25,30x30x1086,4,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
+2,Cajon y estructura,Perfil estructural 25x25x934,Perfil25-25,25x25x934,1,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
+3,Cajon y estructura,Perfil estructural 25x25x654,Perfil25-25,25x25x654,4,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
+4,Cajon y estructura,Perfil estructural 25x25x609,Perfil25-25,25x25x609,1,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
+5,Cajon y estructura,Perfil estructural 30x30x577,Perfil25-25,30x30x577,4,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
+6,Cajon y estructura,Perfil estructural 40x40x461,Perfil25-25,40x40x461,1,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
 7,Cajon y estructura,Chapa caja 85x333x459,Chapa-Caja,85x333x459,1,Chapa metalica plegada,cortar + plegar (VER CAD),envolvente
-8,Cajon y estructura,Perfil estructural 25x25x448,Perfil25-25,25x25x448,1,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
-9,Cajon y estructura,Perfil estructural 25x25x406,Perfil25-25,25x25x406,1,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
-10,Cajon y estructura,Perfil estructural 25x25x191,Perfil25-25,25x25x191,1,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
-11,Cajon y estructura,Perfil estructural 30x122x143,Perfil25-25,30x122x143,2,Tubo estructural 25x25 / 30x30 segun CAD,cortar,envolvente
+8,Cajon y estructura,Perfil estructural 25x25x448,Perfil25-25,25x25x448,1,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
+9,Cajon y estructura,Perfil estructural 25x25x406,Perfil25-25,25x25x406,1,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
+10,Cajon y estructura,Perfil estructural 25x25x191,Perfil25-25,25x25x191,1,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
+11,Cajon y estructura,Perfil estructural 30x122x143,Perfil25-25,30x122x143,2,Perfil plegado en L 25x25 / 30x30 segun CAD,cortar,envolvente
 12,Contrafondo y cerramientos,Panel MDF 18 mm 22x784x1169,MDF18mm,22x784x1169,2,Tablero MDF 18 mm,cortar tablero (VER CAD),envolvente
 13,Contrafondo y cerramientos,Panel MDF 6x497x1021,MDF55,6x497x1021,1,Tablero MDF,cortar tablero (VER CAD),envolvente
 14,Contrafondo y cerramientos,Panel MDF 7x472x982,MDF55,7x472x982,1,Tablero MDF,cortar tablero (VER CAD),envolvente
@@ -27,20 +27,20 @@ N,Componente,Nombre,Capa CAD,Medidas mm,Cantidad,Material,Fabricacion,Confianza
 26,Contrafondo y cerramientos,Chapa 1/8 pulg. 4x46x90,Chapa 1/8,4x46x90,1,Chapa 1/8 pulg. (~3.2 mm),cortar + plegar (VER CAD),envolvente
 27,Contrafondo y cerramientos,Chapa 1/8 pulg. 4x43x83,Chapa 1/8,4x43x83,2,Chapa 1/8 pulg. (~3.2 mm),cortar + plegar (VER CAD),envolvente
 28,Contrafondo y cerramientos,Chapa 1/8 pulg. 3x58x77,Chapa 1/8,3x58x77,1,Chapa 1/8 pulg. (~3.2 mm),cortar + plegar (VER CAD),envolvente
-29,"Mecanismo de giro (ejes, acoples, rodamientos)",Fondo de brazo 6x40x329,FondoBrazo,6x40x329,2,,mecanizar / imprimir (VER CAD),envolvente
-30,"Mecanismo de giro (ejes, acoples, rodamientos)",Buje PTFE 2x4x311,Buje-PTFE,2x4x311,1,PTFE,mecanizar / imprimir (VER CAD),envolvente
-31,"Mecanismo de giro (ejes, acoples, rodamientos)",Acople 8 a 5 7x18x310,ACOPLE 8 a 5,7x18x310,1,,mecanizar / imprimir (VER CAD),envolvente
-32,"Mecanismo de giro (ejes, acoples, rodamientos)",Soporte antivibracion 29x64x73,SoporT-AntiVib,29x64x73,1,,VER CAD,envolvente
-33,"Mecanismo de giro (ejes, acoples, rodamientos)",Rodamiento lineal HLM8UU 19x19x54,RodamientoHLM8UU,19x19x54,1,Rodamiento lineal HLM8UU,comprar,estandar
-34,"Mecanismo de giro (ejes, acoples, rodamientos)",Acople PA6 6x24x31,AcoplesPA6,6x24x31,2,Nylon PA6,mecanizar / imprimir (VER CAD),envolvente
-35,"Mecanismo de giro (ejes, acoples, rodamientos)",Acople PA6 6x27x31,AcoplesPA6,6x27x31,1,Nylon PA6,mecanizar / imprimir (VER CAD),envolvente
-36,"Mecanismo de giro (ejes, acoples, rodamientos)",Acople 8 a 5 8x8x30,ACOPLE 8 a 5,8x8x30,2,,mecanizar / imprimir (VER CAD),envolvente
-37,"Mecanismo de giro (ejes, acoples, rodamientos)",Rodamiento 626 6x19x19,Rodamiento626,6x19x19,11,Rodamiento 626 - 6x19x6 mm,comprar,estandar
-38,"Mecanismo de giro (ejes, acoples, rodamientos)",Acople 8 a 5 6x13x15,ACOPLE 8 a 5,6x13x15,2,,mecanizar / imprimir (VER CAD),envolvente
-39,"Mecanismo de giro (ejes, acoples, rodamientos)",Rodamiento 624 5x13x13,Rodamiento624,5x13x13,3,Rodamiento 624 - 4x13x5 mm,comprar,estandar
-40,"Mecanismo de giro (ejes, acoples, rodamientos)",Acople 8 a 5 2x6x6,ACOPLE 8 a 5,2x6x6,10,,mecanizar / imprimir (VER CAD),envolvente
-41,"Mecanismo de giro (ejes, acoples, rodamientos)",Buje PTFE 4x5x5,Buje-PTFE,4x5x5,1,PTFE,mecanizar / imprimir (VER CAD),envolvente
-42,"Mecanismo de giro (ejes, acoples, rodamientos)",Acople 8 a 5 2x5x5,ACOPLE 8 a 5,2x5x5,2,,mecanizar / imprimir (VER CAD),envolvente
+29,"Mecanismo de rotación (ejes, acoples, rodamientos)",Fondo de brazo 6x40x329,FondoBrazo,6x40x329,2,,mecanizar / imprimir (VER CAD),envolvente
+30,"Mecanismo de rotación (ejes, acoples, rodamientos)",Buje PTFE 2x4x311,Buje-PTFE,2x4x311,1,PTFE,mecanizar / imprimir (VER CAD),envolvente
+31,"Mecanismo de rotación (ejes, acoples, rodamientos)",Acople 8 a 5 7x18x310,ACOPLE 8 a 5,7x18x310,1,,mecanizar / imprimir (VER CAD),envolvente
+32,"Mecanismo de rotación (ejes, acoples, rodamientos)",Soporte antivibracion 29x64x73,SoporT-AntiVib,29x64x73,1,,VER CAD,envolvente
+33,"Mecanismo de rotación (ejes, acoples, rodamientos)",Rodamiento lineal HLM8UU 19x19x54,RodamientoHLM8UU,19x19x54,1,Rodamiento lineal HLM8UU,comprar,estandar
+34,"Mecanismo de rotación (ejes, acoples, rodamientos)",Acople PA6 6x24x31,AcoplesPA6,6x24x31,2,Nylon PA6,mecanizar / imprimir (VER CAD),envolvente
+35,"Mecanismo de rotación (ejes, acoples, rodamientos)",Acople PA6 6x27x31,AcoplesPA6,6x27x31,1,Nylon PA6,mecanizar / imprimir (VER CAD),envolvente
+36,"Mecanismo de rotación (ejes, acoples, rodamientos)",Acople 8 a 5 8x8x30,ACOPLE 8 a 5,8x8x30,2,,mecanizar / imprimir (VER CAD),envolvente
+37,"Mecanismo de rotación (ejes, acoples, rodamientos)",Rodamiento 626 6x19x19,Rodamiento626,6x19x19,11,Rodamiento 626 - 6x19x6 mm,comprar,estandar
+38,"Mecanismo de rotación (ejes, acoples, rodamientos)",Acople 8 a 5 6x13x15,ACOPLE 8 a 5,6x13x15,2,,mecanizar / imprimir (VER CAD),envolvente
+39,"Mecanismo de rotación (ejes, acoples, rodamientos)",Rodamiento 624 5x13x13,Rodamiento624,5x13x13,3,Rodamiento 624 - 4x13x5 mm,comprar,estandar
+40,"Mecanismo de rotación (ejes, acoples, rodamientos)",Acople 8 a 5 2x6x6,ACOPLE 8 a 5,2x6x6,10,,mecanizar / imprimir (VER CAD),envolvente
+41,"Mecanismo de rotación (ejes, acoples, rodamientos)",Buje PTFE 4x5x5,Buje-PTFE,4x5x5,1,PTFE,mecanizar / imprimir (VER CAD),envolvente
+42,"Mecanismo de rotación (ejes, acoples, rodamientos)",Acople 8 a 5 2x5x5,ACOPLE 8 a 5,2x5x5,2,,mecanizar / imprimir (VER CAD),envolvente
 43,Transmision y guiado,Guia de cremallera 11x11x317,GUIA-CREMA,11x11x317,1,,mecanizar / imprimir (VER CAD),envolvente (VER CAD)
 44,Transmision y guiado,Cremallera dentada 24x64x213,Cremayera,24x64x213,1,,mecanizar / imprimir (VER CAD),envolvente
 45,Transmision y guiado,Cremallera dentada 24x65x165,Cremayera,24x65x165,1,,mecanizar / imprimir (VER CAD),envolvente

@@ -3,7 +3,7 @@
 Cada componente se muestra con dos vistas: **locator** para ubicarlo en la incubadora y **solo** para entender que lo compone. Las mini-BOMs se generan desde el inventario CAD.
 
 !!! tip "Orden recomendado"
-    Montar primero cajon, luego contrafondo, mecanismo de giro, transmision, bandejas y puerta. Dejar actuadores/electrica para despues de validar que la mecanica se mueve libremente.
+    Montar primero cajon, luego contrafondo, mecanismo de rotación, transmision, bandejas y puerta. Dejar actuadores/electrica para despues de validar que la mecanica se mueve libremente.
 
 ## Cajon y estructura
 
@@ -39,7 +39,7 @@ Cada componente se muestra con dos vistas: **locator** para ubicarlo en la incub
 **Pasos**
 
 1. Presentar MDF y chapas sobre la estructura.
-2. Verificar interferencias con puerta, bandejas y mecanismo de giro.
+2. Verificar interferencias con puerta, bandejas y mecanismo de rotación.
 3. Marcar perforaciones con CAD abierto.
 4. Fijar paneles evitando fugas de aire.
 
@@ -51,12 +51,12 @@ Cada componente se muestra con dos vistas: **locator** para ubicarlo en la incub
 
 **Riesgos / VER CAD**
 
-- Plegados de chapa y posiciones de agujeros no salen del bounding box.
+- Plegados de chapa y posiciones de agujeros no salen de la medida exterior.
 
-## Mecanismo de giro
+## Mecanismo de rotación
 
-![Locator mecanismo de giro](img/componentes/rotacion-locator.png){ width=560 }
-![Subconjunto mecanismo de giro](img/componentes/rotacion-solo.png){ width=420 }
+![Locator mecanismo de rotación](img/componentes/rotacion-locator.png){ width=560 }
+![Subconjunto mecanismo de rotación](img/componentes/rotacion-solo.png){ width=420 }
 
 --8<-- "cad/componentes/rotacion.md"
 
@@ -64,12 +64,12 @@ Cada componente se muestra con dos vistas: **locator** para ubicarlo en la incub
 
 1. Montar rodamientos en alojamientos.
 2. Presentar ejes, bujes y acoples sin apretar.
-3. Alinear el conjunto y girar manualmente.
+3. Alinear el conjunto y rotar manualmente.
 4. Ajustar acoples cuando no haya roce ni punto duro.
 
 **Control de calidad**
 
-- Giro suave a mano.
+- Rotación suave a mano.
 - Rodamientos asentados.
 - Acoples centrados.
 
@@ -99,7 +99,7 @@ Cada componente se muestra con dos vistas: **locator** para ubicarlo en la incub
 
 **Riesgos / VER CAD**
 
-- Posicion de cremallera y guia es critica para que el volteo no se trabe.
+- Posicion de cremallera y guia es critica para que la rotación no se trabe.
 
 ## Bandejas y bastidor giratorio
 

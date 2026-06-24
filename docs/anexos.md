@@ -36,4 +36,4 @@ python3 Rediseno/extract_cad.py
 mkdocs build --strict
 ```
 
-El render usa mallas nativas de `rhino3dm`; el diagnostico `gmsh` es opcional y no se usa para mallar el modelo completo.
+El render usa mallas nativas de `rhino3dm`.

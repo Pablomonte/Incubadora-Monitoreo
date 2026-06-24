@@ -22,7 +22,7 @@
 | Calefaccion | Resistencia 200 W comandada por TRIAC. |
 | Ventilacion | Ventilador/turbina 220 VAC y cooler segun montaje. |
 | Humidificacion | Bomba 12 V comandada por salida de potencia. |
-| Volteo | Motorreductor 12 V mediante puente H L298. |
+| Rotación | Motorreductor 12 V mediante puente H L298. |
 | Sensado | BME280 por I2C y dos reed switches como finales de carrera. |
 
 ## Placa Olivia v0.2

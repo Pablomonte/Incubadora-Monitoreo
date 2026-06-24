@@ -49,7 +49,7 @@ Mini-BOM generado desde `inventario.json`. El inventario CAD completo queda en l
 | 27 | Chapa 1/8 pulg. 4x43x83 | 4x43x83 | 2 | Chapa 1/8 | envolvente |
 | 28 | Chapa 1/8 pulg. 3x58x77 | 3x58x77 | 1 | Chapa 1/8 | envolvente |
 
-## Mecanismo de giro (ejes, acoples, rodamientos)
+## Mecanismo de rotación (ejes, acoples, rodamientos)
 
 ### Comprar
 

@@ -36,7 +36,7 @@ COMPONENT_ORDER = [
 COMPONENT_LABELS = {
     "cajon": "Cajon y estructura",
     "contrafondo": "Contrafondo y cerramientos",
-    "rotacion": "Mecanismo de giro (ejes, acoples, rodamientos)",
+    "rotacion": "Mecanismo de rotación (ejes, acoples, rodamientos)",
     "transmision": "Transmision y guiado",
     "bandejas": "Bandejas y bastidor giratorio",
     "puerta": "Puerta",
@@ -187,7 +187,7 @@ def component_rank(component: str) -> int:
 def material_of(leaf: str) -> str:
     n = leaf.lower()
     if "perfil25" in n:
-        return "Tubo estructural 25x25 / 30x30 segun CAD"
+        return "Perfil plegado en L 25x25 / 30x30 segun CAD"
     if "chapa 1/8" in n:
         return "Chapa 1/8 pulg. (~3.2 mm)"
     if n.startswith("chapa"):
