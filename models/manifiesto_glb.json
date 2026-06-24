@@ -396,7 +396,7 @@
       },
       {
         "component": "rotacion",
-        "label": "Mecanismo de giro (ejes, acoples, rodamientos)",
+        "label": "Mecanismo de rotación (ejes, acoples, rodamientos)",
         "position": [
           969.2155849818809,
           311.40755386204756,
