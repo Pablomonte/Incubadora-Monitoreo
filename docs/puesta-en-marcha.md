@@ -17,7 +17,7 @@ La puesta en marcha se hace sin huevos y por etapas. No probar automaticos antes
 11. Probar calefactor por activacion corta.
 12. Probar ventilacion.
 13. Probar bomba con agua controlada y sin salpicaduras.
-14. Probar rotación manual, sentido de giro y detencion por reeds.
+14. Probar rotación manual, sentido de rotación y detencion por reeds.
 15. Ejecutar ciclo sin huevos hasta estabilizar temperatura, humedad y una rotación completa.
 
 ## Valores a registrar
